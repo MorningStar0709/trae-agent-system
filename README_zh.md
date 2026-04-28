@@ -29,7 +29,7 @@
 
 ```powershell
 # 克隆仓库
-git clone https://github.com/yourusername/trae-skills.git
+git clone https://github.com/MorningStar0709/trae-skills.git
 cd trae-skills
 
 # 导入到 Trae

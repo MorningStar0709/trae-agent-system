@@ -29,7 +29,7 @@
 
 ```powershell
 # Clone the repository
-git clone https://github.com/yourusername/trae-skills.git
+git clone https://github.com/MorningStar0709/trae-skills.git
 cd trae-skills
 
 # Import to Trae

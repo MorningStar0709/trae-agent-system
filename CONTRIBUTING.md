@@ -20,8 +20,8 @@
 1. Fork 本仓库
 2. 克隆你的 Fork 到本地
    ```powershell
-   git clone https://github.com/yourusername/Trae-skills.git
-   cd Trae-skills
+   git clone https://github.com/MorningStar0709/trae-skills.git
+   cd trae-skills
    ```
 
 3. 创建特性分支
@@ -157,8 +157,8 @@ A:
 
 ## 联系方式
 
-- **GitHub Issues**: [提交问题](https://github.com/yourusername/Trae-skills/issues)
-- **Email**: your.email@example.com（可选）
+- **GitHub Issues**: [提交问题](https://github.com/MorningStar0709/trae-skills/issues)
+- **Email**: （可选）
 
 ## 行为准则
 
