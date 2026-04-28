@@ -2,9 +2,12 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
+*.pyo
 .venv/
 venv/
 env/
+ENV/
 .env
 
 # Node
@@ -12,10 +15,25 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# Distribution / Packaging
+dist/
+build/
+*.egg-info/
+*.egg
 
 # OS
 .DS_Store
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 
 # IDEs
 .vscode/
@@ -25,6 +43,18 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+*.user
 
-# Trae related (if any local debug files should be ignored)
+# Trae related
 .trae_debug/
+.trae/
+*.trae-skill-disabled
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+~*
