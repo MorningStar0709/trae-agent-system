@@ -9,6 +9,8 @@ Use this Skill to review complete Trae Skill packages for practical stability. A
 
 When the user writes in Chinese, report findings and recommendations in Simplified Chinese. Keep Skill names, file paths, CLI commands, JSON keys, config keys, tool names, API names, environment variables, and error identifiers in English or original form.
 
+The reviewer is the agent. No human review step is required unless the user explicitly asks for one. Treat scripts as repeatable evidence gatherers, not authorities: the final review is an agent contextual judgment based on script leads, direct file reading, tight evidence, and the rating rules in this Skill.
+
 ## Use This Skill
 
 Use this Skill when the user asks to:
@@ -226,7 +228,7 @@ Flag these as findings:
 3. Read each `SKILL.md` first. Do not bulk-read long resource files unless referenced by the Skill or needed for evidence.
 4. Map the Skill's intended job, trigger phrases, required tools, scripts, outputs, and failure paths.
 5. Inspect related scripts for Windows host compatibility, exit code behavior, JSON/CLI stability, and over-localization.
-6. Use the script output as evidence, not as the final judgment. Resolve `needs_context_review` hits by reading the surrounding file context.
+6. Use the script output as evidence, not as the final agent judgment. Resolve `needs_context_review` hits by reading the surrounding file context.
 7. Rate each Skill using the rating scale below.
 8. Report actionable findings with file paths and tight line references when possible.
 9. Recommend minimal fixes first. Do not suggest broad rewrites when a small boundary, command, or failure-handling patch solves the stability issue.
@@ -234,7 +236,7 @@ Flag these as findings:
 
 ## Review Script
 
-Use `scripts/review_skills.py` for repeatable scanning before final human/agent judgment. The script is intentionally lightweight and uses only the Python standard library.
+Use `scripts/review_skills.py` for repeatable scanning before final agent contextual judgment. The script is intentionally lightweight and uses only the Python standard library.
 
 The script helps with:
 
@@ -267,14 +269,14 @@ Use `--max-file-bytes <bytes>` only when a Skill intentionally includes large re
 
 Script output rules:
 
-- Treat `preliminary_rating` as a starting point, not the final rating.
+- Treat `preliminary_rating` as a starting point, not the final agent rating.
 - Treat findings with `needs_context_review: true` as leads that require context reading; they do not lower the script's preliminary score until the agent confirms them.
 - Keep JSON keys in English and stable.
 - Report to Chinese-speaking users in Simplified Chinese after interpreting the script output.
 - Do not automatically edit files based only on script findings.
 - If `--root` or `--skill` points to a missing directory, the script returns exit code `2` and emits a structured JSON or Markdown error instead of a Python traceback.
 - When reviewing `skill-stability-review` itself, the script skips only its documented anti-pattern examples and scan-command sections, not the entire `SKILL.md`.
-- If a new script type appears, use the script's scan findings as leads and still inspect the file manually when it affects execution. The scanner is intentionally extensible, but final judgment remains contextual.
+- If a new script type appears, use the script's scan findings as leads and still read and evaluate the file context directly when it affects execution. The scanner is intentionally extensible, but final agent judgment remains contextual.
 
 ## Useful Windows Scan Commands
 

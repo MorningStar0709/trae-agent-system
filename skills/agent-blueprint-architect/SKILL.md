@@ -1,6 +1,6 @@
 ---
 name: agent-blueprint-architect
-description: 当用户需要设计、创建、优化或拆分具体的 Trae agent 配置时使用。这种需求通常表现为：想为一个具体任务创建一个专门的 agent；想为现有 agent 优化配置或拆分成多个职责明确的 agent；想为一个新功能设计 agent 的命名、触发条件和能力范围。典型请求包括："帮我创建一个 agent"、"设计一个做 X 的 agent"、"这个 agent 该怎么命名"、"优化一下现有的 agent"、"拆一个专门做 X 的 agent"、"这个功能应该独立成 agent 吗"。支持隐式触发："我需要一个能做 X 的"、"能不能拆分成多个"、"现在的能力不够"、"帮我设计一个"。不要在普通提示词写作、软件架构讨论、或用户只是泛泛讨论 agent 概念时使用。
+description: Use when the user needs to design, create, optimize, split, or name a reusable Trae agent configuration for a concrete task, including Chinese implicit requests such as "需要一个能做 X 的专门助手/agent/智能体", "现有 agent 职责太宽或能力不够", "这个功能是否应该独立成 agent", or "想把某个工作流固定成可复用 agent". Do not use for ordinary prompt writing, Trae Skill/SKILL.md creation or review, software architecture, tool selection, general agent discussion, or requests without intent to produce a reusable Trae agent configuration.
 ---
 
 # Agent Blueprint Architect
@@ -24,7 +24,7 @@ description: 当用户需要设计、创建、优化或拆分具体的 Trae agen
 
 ## 调用边界
 
-使用此 Skill 的场景：
+使用此 Skill 的场景 (Use When)：
 
 - 用户要新建一个 agent
 - 用户要给新 agent 起英文标识名或中文名称
@@ -35,16 +35,18 @@ description: 当用户需要设计、创建、优化或拆分具体的 Trae agen
 - 用户询问某个 MCP 是否适合独立创建 agent
 - 用户想知道某个 agent 应该开启或关闭哪些能力
 
-支持隐式触发：
+支持隐式触发，但必须能推断用户想沉淀为可复用 Trae agent 配置：
 
-- "我需要一个能做 X 的 agent" → 暗示需要创建 agent
-- "现在的 agent 能力不够" → 暗示需要优化或新建
-- "能不能拆分成多个 agent" → 暗示需要拆分 agent
-- "这个功能应该独立成 agent" → 暗示需要设计新 agent
-- "帮我设计一个做 X 的 agent" → 暗示需要创建
-- "agent 怎么实现 X 功能" → 暗示需要设计
+- "我需要一个能做 X 的专门助手/agent/智能体" → 暗示需要创建 agent
+- "现在这个 agent 职责太宽/能力不够/总是误触发" → 暗示需要优化或拆分 agent
+- "能不能拆分成多个专门负责 X/Y 的 agent" → 暗示需要拆分 agent
+- "这个功能应该独立成 agent 吗" → 暗示需要判断 agent 边界
+- "帮我设计一个长期复用的 X 工作流助手" → 暗示可能需要 agent 配置
+- "我想把 X 流程固定成一个可复用配置" → 暗示需要设计 agent 配置
 
-不要使用此 Skill 的场景：
+不要仅因用户说"帮我设计一个""能力不够""怎么实现"就触发；必须结合上下文判断其目标是 Trae agent 配置，而不是普通方案、提示词、代码实现或工具选择。
+
+不要使用此 Skill 的场景 (Do Not Use)：
 
 - 用户要创建、修改或评审 Trae Skill 或 `SKILL.md`
 - 用户只是要写一段普通提示词，不打算做成可复用 agent
@@ -295,6 +297,10 @@ description: 当用户需要设计、创建、优化或拆分具体的 Trae agen
 # 工作流
 
 1. ...
+
+# 工具策略
+
+[说明该 agent 应如何使用阅读、编辑、终端、浏览器、联网搜索或 MCP；不硬编码未确认存在的工具。]
 
 # 输出规范
 
