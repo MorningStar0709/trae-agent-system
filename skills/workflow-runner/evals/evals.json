@@ -1,0 +1,49 @@
+{
+  "skill_name": "workflow-runner",
+  "evals": [
+    {
+      "id": "yaml-run-golden-path",
+      "prompt": "执行 `workflows/story-creation.yaml`，按里面的角色顺序跑完整个工作流。",
+      "expected_output": "识别为 YAML 驱动多角色工作流；先读取并解析 YAML；展示分层执行计划；说明会读取角色文件并按角色执行；若可用则对同层步骤并行；最终使用固定结果骨架汇报。",
+      "files": [
+        "workflows/story-creation.yaml"
+      ]
+    },
+    {
+      "id": "no-yaml-generate-first",
+      "prompt": "帮我用产品经理、架构师和 QA 一起评审这个 PRD，没有现成 yaml，你先帮我生成工作流。",
+      "expected_output": "触发快捷模式；先生成最小工作流草案并请求确认，而不是直接开始执行；此阶段不得谎称执行已完成。",
+      "files": []
+    },
+    {
+      "id": "boundary-plan-execution",
+      "prompt": "这是已经写好的实现计划，按计划逐任务改代码并跑测试。",
+      "expected_output": "不应优先触发 workflow-runner；应识别这更适合 executing-plans 或 subagent-driven-development。",
+      "files": []
+    },
+    {
+      "id": "parallel-layer-fallback",
+      "prompt": "运行这个多角色工作流，如果第二层两个步骤能并行就并行。",
+      "expected_output": "说明只有在当前环境存在合适子代理、步骤不共享状态且角色任务与子代理类型存在明确映射时才真实并行，否则回退为逻辑并行层下的顺序执行；最终汇报中明确并行情况。",
+      "files": []
+    },
+    {
+      "id": "inline-input-extraction",
+      "prompt": "请使用 workflow-runner 执行 `resources/sample-workflow.yaml`。输入 topic = \"为一个 PRD 做多角色评审\"。输入 context = \"重点关注可执行性、风险和最终结论\"。",
+      "expected_output": "从同一条用户消息中提取 topic 与 context，不重复追问；继续按 YAML 执行。",
+      "files": []
+    },
+    {
+      "id": "document-input-reading",
+      "prompt": "请使用 workflow-runner 执行 `resources/sample-prd-review-workflow.yaml`。输入 prd_file = `resources/sample-prd.md`。输入 review_focus = \"重点关注目标清晰度、实施代价、风险和验收标准\"。",
+      "expected_output": "识别 prd_file 为文档输入；先读取 sample-prd.md，再把文档内容作为角色上下文，而不是只把路径字符串代入模板。",
+      "files": []
+    },
+    {
+      "id": "regression-missing-role-reporting",
+      "prompt": "运行这个工作流；如果某个 role 文件缺失，就如实汇报缺失项和查找位置，不要跳过继续。",
+      "expected_output": "触发 workflow-runner；角色文件缺失时转入阻塞或部分完成状态；明确缺失的 role、已尝试的查找位置和受影响步骤。",
+      "files": []
+    }
+  ]
+}

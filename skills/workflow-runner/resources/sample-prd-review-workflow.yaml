@@ -1,0 +1,29 @@
+name: sample-prd-review
+agents_dir: sample-agents
+inputs:
+  - name: prd_file
+    required: true
+    default: ""
+  - name: review_focus
+    required: false
+    default: "重点关注目标清晰度、可执行性、风险和验收闭环"
+steps:
+  - id: framing
+    role: analysis/researcher
+    task: "阅读 {{prd_file}} 并提炼目标、用户价值、关键约束与未决问题。额外关注：{{review_focus}}"
+    output: framing_notes
+  - id: solution-pass
+    role: design/architect
+    task: "基于 {{prd_file}} 与 {{framing_notes}}，从系统设计和实施优先级角度给出建议。"
+    depends_on: [framing]
+    output: solution_notes
+  - id: risk-pass
+    role: review/risk-critic
+    task: "基于 {{prd_file}} 与 {{framing_notes}}，识别需求风险、实现风险和验收风险。"
+    depends_on: [framing]
+    output: risk_notes
+  - id: synthesis
+    role: synthesis/editor
+    task: "综合 {{solution_notes}} 与 {{risk_notes}}，输出针对该 PRD 的最终多角色评审结论。"
+    depends_on: [solution-pass, risk-pass]
+    output: final_review

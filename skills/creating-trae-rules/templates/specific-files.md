@@ -3,7 +3,7 @@ alwaysApply: false
 globs: src/**/*.ts,src/**/*.tsx
 ---
 
-# Rule Title
+# [在此填写规则名称]
 
-- Replace this line with guidance that applies only to the matched files.
-- Use project-root-relative glob patterns.
+- [针对上述文件模式的约束 1]
+- [约束 2]

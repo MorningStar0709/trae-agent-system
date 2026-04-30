@@ -5,360 +5,238 @@ description: Use when the user needs to design, create, optimize, split, or name
 
 # Agent Blueprint Architect
 
-使用这个 Skill 为新建 Trae agent 生成一套可直接填写和微调的最终配置。
+## Overview
 
-核心目标不是设计完整的多 agent 系统，也不是创建 Trae Skill，而是帮助用户定义一个边界清晰、命名稳定、触发准确、能力开关克制的新 agent。
+Use this Skill to generate a final, ready-to-fill and fine-tune configuration for a new Trae agent.
 
-每次输出必须覆盖：
+The core goal is not to design a complete multi-agent system, nor to create a Trae Skill, but to help users define a new agent with clear boundaries, stable naming, accurate triggers, and restrained capability switches.
 
-- 中文名称
-- 系统提示词
-- 英文标识名
-- 何时触发
-- 能力开关配置
-- 简短配置校验
+Every output must cover:
+- Chinese name
+- System prompt
+- English identifier
+- When to trigger
+- Capability switch configuration
+- Brief configuration validation
 
-默认直接给最终可用版本。不要先给粗糙初稿再等待用户追问"还需要优化吗"。除非缺少会改变 agent 核心定位的关键信息，否则先基于现有信息生成配置，再自行完成一轮优化检查，最后只交付优化后的最终版。
+Default to providing the final usable version directly. Do not give a rough draft first and wait for the user to ask "does it need more optimization". Unless key information that would change the agent's core positioning is missing, generate the configuration based on existing info, perform a round of optimization yourself, and deliver only the optimized final version.
 
-默认输出必须克制。不要把内部参考表、设计依据、通用能力矩阵或 Agent 蓝图设计 agent 自身配置附加到每个结果里，除非用户明确要求"给我参考表""给我能力矩阵""解释依据"或"给我 Agent 蓝图设计师自身配置"。
+Default to restrained output. Do not append internal reference tables, design rationale, generic capability matrices, or the Agent Blueprint Architect's own configuration to every result, unless explicitly requested by the user.
 
-## 调用边界
+## Use This Skill
 
-使用此 Skill 的场景 (Use When)：
+- The user wants to create a new agent.
+- The user wants to name a new agent (English identifier or Chinese name).
+- The user wants to write a system prompt for a new agent.
+- The user wants to define trigger conditions for a new agent.
+- The user wants to split a broad agent idea into a new agent with specific responsibilities.
+- The user has a draft agent configuration and wants to optimize it before adding it to Trae.
+- The user asks if a certain MCP is suitable for an independent agent.
+- The user wants to know which capabilities should be enabled or disabled for a certain agent.
 
-- 用户要新建一个 agent
-- 用户要给新 agent 起英文标识名或中文名称
-- 用户要为新 agent 写系统提示词
-- 用户要定义新 agent 的触发条件
-- 用户想把一个宽泛 agent 想法拆成一个职责明确的新 agent
-- 用户已有一版 agent 配置，想在加入 Trae 前优化
-- 用户询问某个 MCP 是否适合独立创建 agent
-- 用户想知道某个 agent 应该开启或关闭哪些能力
+Implicit triggers are supported, but you must be able to infer the intent to precipitate a reusable Trae agent configuration.
 
-支持隐式触发，但必须能推断用户想沉淀为可复用 Trae agent 配置：
+## Do Not Use
 
-- "我需要一个能做 X 的专门助手/agent/智能体" → 暗示需要创建 agent
-- "现在这个 agent 职责太宽/能力不够/总是误触发" → 暗示需要优化或拆分 agent
-- "能不能拆分成多个专门负责 X/Y 的 agent" → 暗示需要拆分 agent
-- "这个功能应该独立成 agent 吗" → 暗示需要判断 agent 边界
-- "帮我设计一个长期复用的 X 工作流助手" → 暗示可能需要 agent 配置
-- "我想把 X 流程固定成一个可复用配置" → 暗示需要设计 agent 配置
+- The user wants to create, modify, or review a Trae Skill or `SKILL.md`.
+- The user just wants to write a normal prompt without intending to make a reusable agent.
+- The user is doing software architecture, product architecture, organizational structure, or business process design.
+- The user is generally discussing agent concepts without intending to create a specific agent.
+- The user is just selecting tools for the current task, rather than creating a new agent configuration.
+- The user wants the agent to assume the role of SOLO Coder's main orchestrator, unless explicitly asking to review the necessity of a main controller agent.
+- Do not attempt to create, discover, or modify Trae agents by searching for local `agents/` or `custom_agents/` folders, reading workspace `.trae` files as if they were agent configs, or probing encrypted local databases.
 
-不要仅因用户说"帮我设计一个""能力不够""怎么实现"就触发；必须结合上下文判断其目标是 Trae agent 配置，而不是普通方案、提示词、代码实现或工具选择。
+If the request is ambiguous, ask first: "你是想把这个做成一个可复用的 Trae agent 配置吗？" Do not default to designing all prompts or workflows as agents.
 
-不要使用此 Skill 的场景 (Do Not Use)：
+## Execution Protocol
 
-- 用户要创建、修改或评审 Trae Skill 或 `SKILL.md`
-- 用户只是要写一段普通提示词，不打算做成可复用 agent
-- 用户要做软件架构，产品架构、组织结构或业务流程设计
-- 用户只是泛泛讨论 agent 概念，没有准备创建具体 agent
-- 用户只是为当前任务选择工具，而不是创建新的 agent 配置
-- 用户要让 agent 承担 SOLO Coder 的主控调度职责，除非用户明确要求评审主控 agent 的必要性
+### 1. Information Gathering
 
-如果请求含糊，先问一句："你是想把它做成一个可复用的 Trae agent 配置吗？"不要默认把所有提示词或工作流都设计成 agent。
+Extract known information from the user's input first. Only ask questions when key direction is missing.
 
-## 信息收集
+You must identify:
+- The agent's core responsibility.
+- The scenarios the agent serves.
+- The agent's inputs and outputs.
+- Adjacent tasks the agent should NOT handle.
+- Whether a dedicated MCP or special capability is needed.
+- Whether Chinese-first, English-first, or bilingual output is required.
 
-先从用户输入中提取已知信息，只在缺少关键方向时提问。
+Only ask questions first if:
+- Core responsibilities are completely unclear.
+- Multiple responsibilities conflict and cannot be merged into a single agent.
+- The domain is unknown and cannot be inferred from context.
 
-必须识别：
+### 2. Chinese Scenario Strategy
 
-- agent 的核心职责
-- agent 服务的场景
-- agent 的输入和输出
-- agent 不应该处理的相邻任务
-- 是否需要专用 MCP 或特殊能力
-- 是否需要中文优先、英文优先或双语输出
+Default to Chinese users and Chinese workflows:
+- Explanations, boundaries, workflows, failure handling, and output specs default to Simplified Chinese.
+- English is used only for English identifiers, necessary technical keywords, tool names, or parts explicitly requested in English.
+- Do not mechanically mix Chinese and English; only keep necessary technical anchors (e.g., `DOM`, `Console`, `Network/XHR`, `MCP`, `API`, `CLI`, `E2E`).
+- Do not write the entire system prompt in English and just append "answer in Chinese".
+- Trigger descriptions are Chinese-first, supplemented with a few necessary English keywords to ensure natural Chinese requests hit accurately while avoiding false triggers from English keywords.
 
-只有以下情况才先问问题：
+### 3. Platform Assumption Strategy
 
-- 核心职责完全不明确
-- 用户给出的多个职责互相冲突，无法合并为单一 agent
-- 不知道 agent 要服务哪个领域，且无法从上下文推断
+Default to designing agent configurations for Windows Trae users, but do not write all agents as command-execution agents.
+- If the agent does not need a terminal, script, or local file path, do not force Windows/PowerShell rules into it.
+- If the agent must run commands, read/write local files, call local tools, or save artifacts, the system prompt must specify Windows/Trae-friendly execution constraints.
+- Command examples prioritize PowerShell; path examples prioritize Windows paths or `%userprofile%`.
+- Do not assume the user environment has a Unix shell, macOS paths, Linux-only paths, or unconfirmed external CLIs.
 
-其他不确定点写入简短配置校验，不要阻塞交付。
+### 4. Trae Agent Reality Check
 
-## 中文场景策略
+- Trae custom agents are not managed through user-editable plaintext agent folders in `.trae/` or `%USERPROFILE%\.trae\`.
+- Do not search for pseudo-config paths such as `agents/`, `custom_agents/`, or `agent.md` to discover or create Trae agents.
+- Do not attempt to read or modify encrypted local databases, sandbox state files, or other reverse-engineered storage in order to create or inspect agents.
+- The stable creation path is: generate the final blueprint, ask the user to copy it, and let the user paste it into the Trae UI manually.
+- To discover existing subagents, use `discovering-subagent-capabilities` — it reads the `Task` tool's `subagent_type` enum from the system prompt. This covers all created custom agents.
+- When designing a new agent, run `discovering-subagent-capabilities` first to identify potential overlap with existing subagents.
 
-默认面向中文用户和中文工作流：
+**Anti-Pattern: Automated Agent Creation via Scripts**
 
-- 解释、边界，工作流、失败处理、输出规范默认使用简体中文
-- 英文只用于英文标识名、必要技术关键词、工具能力名或用户明确要求英文输出的部分
-- 不要机械中英混写；只保留必要技术锚点，例如 `DOM`、`Console`、`Network/XHR`、`MCP`、`API`、`CLI`、`E2E`
-- 不要把整段系统提示词写成英文后只加一句"用中文回答"
-- 触发描述中文优先，并补充少量必要英文关键词，保证中文请求自然命中，同时避免英文关键词导致误触发
+A previous attempt tried to automate Agent creation by writing a Python script, following this wrong path:
 
-推荐语言比例：
+1. Search for local `agents/` folders or `.trae/` config files → Found **nothing**, because Trae does not use plaintext config folders for custom agents.
+2. Probe deeper and discover the actual database at `%APPDATA%\trae\ModularData\ai-agent\database.db` — an **encrypted SQLite database**.
+3. Realize that writing external scripts to inject data into `database.db` carries unacceptable risks:
+   - **Data corruption**: Breaking the database integrity could destroy all existing agents.
+   - **Lock conflicts**: Trae holds an exclusive lock on the database during runtime; external writes are intercepted or cause crashes.
+4. Also find `sandbox` directory with runtime JSON state files — tightly coupled to IDE runtime, not suitable for direct manipulation.
+5. **Result**: The script-based approach is abandoned. The only reliable path is **"blueprint delivery + manual paste"**.
 
-- 控制逻辑：中文，例如角色、边界，工作流、失败处理、输出规范
-- 技术锚点：保留英文原词，例如 `Lighthouse`、`MATLAB`、`Knowledge Graph Memory MCP`、`PyTorch`、`Chrome DevTools MCP`
-- 用户可见结果：默认简体中文
-- 标识字段：英文标识名使用英文，中文名称使用中文
+**Key lesson**: Do not repeat this exploration. Do not write scripts to automate agent creation. Do not probe local databases. Do not generate agent config files and ask the user to place them in a filesystem path. The only correct final output is a Markdown blueprint that the user copies and pastes into the Trae UI.
 
-## 平台假设策略
+## Design Rules
 
-默认面向 Windows 版 Trae 使用者设计 agent 配置，但不要把所有 agent 都写成命令执行型 agent。
+### English Identifier
 
-- 如果 agent 不需要终端、脚本或本地文件路径，不要硬塞 Windows/PowerShell 规则
-- 如果 agent 需要运行命令、读写本地文件、调用本地工具或保存产物，系统提示词中必须写明 Windows/Trae 友好的执行约束
-- 命令示例优先使用 PowerShell；路径示例优先使用 Windows 路径或 `%userprofile%`
-- 不要默认用户环境有 Unix shell、macOS 路径、Linux-only 路径或未确认的外部 CLI
+- Use lowercase kebab-case.
+- Contain only lowercase letters, numbers, and hyphens.
+- Prefer 2 to 4 English words.
+- Name by responsibility or domain.
+- Avoid generic or versioned suffixes like `pro`, `expert`, `helper`, `v2`, unless explicitly requested.
 
-## 设计规则
+### Chinese Name
 
-### 英文标识名
+- Use concise, professional, and easily recognizable Chinese names.
+- The name must directly reflect the responsibility.
+- Prefer 4 to 10 Chinese characters.
+- Avoid over-promising words like "all-powerful", "ultimate", "strongest".
 
-- 使用 lowercase kebab-case
-- 只包含小写字母、数字和连字符
-- 优先 2 到 4 个英文词
-- 用职责或领域命名
-- 保持短、准、稳定
-- 避免 `pro`、`expert`、`helper`、`v2` 等泛化或版本化后缀，除非用户明确要求
+### When to Trigger
 
-推荐：
+The trigger description determines when Trae selects this agent. It must be specific, not just a pile of keywords.
 
-- `browser-test-runner`
-- `matlab-execution-engineer`
-- `project-memory-curator`
-- `deep-learning-research-engineer`
-- `agent-blueprint-architect`
+Must include:
+- The core action the agent is responsible for.
+- Natural Chinese expressions suitable for triggering.
+- A few necessary English technical keywords.
+- Adjacent scenarios that should NOT trigger it.
 
-避免：
+### System Prompt
 
-- `agent-helper`
-- `super-pro-agent`
-- `test-v2`
-- `do-everything`
+The system prompt should make the agent capable of working, not just describe its personality.
 
-### 中文名称
+Must include:
+- Role: Exact responsibility of the agent.
+- Scope: What it is suited to handle.
+- Boundaries: What it is not suited to handle.
+- Principles: Key judgment rules.
+- Workflow: 4 to 7 specific steps.
+- Tool Strategy: Described by capability, not hardcoding unconfirmed tool names.
+- Output Spec: The structure of the final answer.
+- Failure Handling: What to do when information is insufficient, out of scope, or capabilities are unavailable.
+- If MCP is used, include MCP usage strategy and safety boundaries.
 
-- 使用简洁、专业、容易识别的中文名称
-- 名称要直接体现职责
-- 优先 4 到 10 个汉字
-- 避免"全能""终极""最强"等过度承诺词
+## Generation Flow
 
-推荐：
+1. **Pre-check existing subagents**: Use `discovering-subagent-capabilities` to read current `Task` tool's `subagent_type` enum. For each existing subagent, compare its description against the new agent's intended capability. Classification:
+   - **Exact match**: Recommend using the existing subagent. Do not create a duplicate.
+   - **Partial overlap but different scope**: Document the differentiation boundary in the new agent's trigger and system prompt, so the two agents have clear separation.
+   - **No overlap**: Proceed to step 2.
+2. Extract requirements.
+3. Judge form (should it be an agent, or a Skill/MCP/normal task).
+4. Generate candidates.
+5. Self-check and optimize.
+6. Configure capabilities.
+7. Compress boundaries.
+8. Final delivery (output only the optimized final version and keep the creation workflow UI-manual rather than filesystem- or database-based).
 
-- 浏览器测试执行员
-- MATLAB执行工程师
-- 项目记忆管家
-- 深度学习研工专家
-- Agent蓝图设计师
+## Capability Switch Rules
 
-### 何时触发
+Output capability switch configurations for every new agent. Default to the most stable configuration: only enable capabilities strictly necessary for the core responsibility.
 
-触发描述决定 Trae 什么时候选择这个 agent。它必须具体，不能只堆关键词。
-
-必须包含：
-
-- agent 负责的核心动作
-- 适合触发的中文自然表达
-- 少量必要英文技术关键词
-- 不应触发的相邻场景
-
-推荐结构：
-
-```text
-当用户需要[核心动作]，并且上下文涉及[领域/材料/产物]时使用。典型请求包括："……""……"，或提到 [English keyword]。不要在[相邻但不属于此 agent 的场景]时使用。
-```
-
-触发描述应避免：
-
-- "处理所有 X 相关任务"这类过宽表达
-- 只列关键词，不说明用户意图
-- 只有正向触发，没有"不要使用"的负向边界
-- 过度加入英文关键词，导致普通英文技术讨论误触发
-
-### 系统提示词
-
-系统提示词要让 agent 会做事，而不是只描述性格。
-
-必须包含：
-
-- 角色：agent 的精确职责
-- 职责范围：适合处理什么
-- 边界：不适合处理什么
-- 工作原则：关键判断规则
-- 工作流：4 到 7 个具体步骤
-- 工具策略：按能力描述，不硬编码用户环境中未确认存在的工具名
-- 输出规范：最终回答结构
-- 失败处理：信息不足、超出范围、能力不可用时怎么做
-- 如有 MCP，则包含 MCP 使用策略和安全边界
-
-避免：
-
-- 大段愿景或口号
-- "你要乐于助人"这类空泛描述
-- 未验证的平台限制
-- 硬编码不存在的 MCP 或工具名称
-- 把多个 agent 的职责塞进一个提示词
-
-## 生成流程
-
-每次生成 agent 配置时，按以下流程执行，但不要把中间草稿展示给用户：
-
-1. 抽取需求：识别 agent 的核心职责、目标场景、输入、输出和边界
-2. 判断形态：确认它是否应该独立成 agent，还是更适合作为 Skill、MCP 工具能力或 SOLO Coder 的普通任务
-3. 生成候选：拟定英文标识名、中文名称、何时触发和系统提示词
-4. 自检优化：检查是否触发过宽、职责过多、系统提示词过空、输出格式过重、中文场景不自然
-5. 配置能力：根据 agent 核心职责决定阅读、编辑、终端、预览/浏览器、联网搜索和 MCP 专用能力是否开启
-6. 压缩边界：删除泛泛而谈的内容，补充不要触发的相邻场景
-7. 最终交付：只输出优化后的最终版
-
-自检时优先修正以下问题：
-
-- "处理所有相关任务"这类过宽触发
-- 只有正向触发，没有负向边界
-- 系统提示词只有角色描述，没有可执行工作流
-- 输出格式不区分任务类型，导致简单任务被过度报告
-- 英文主导而中文场景不自然
-- 多个职责被塞进一个 agent
-- 工具名、平台限制或能力假设未经用户确认
-- 把 MCP 当作创建 agent 的唯一理由，而不是判断是否存在稳定工作流
-
-## 能力开关规则
-
-为每个新 agent 输出能力开关配置。默认采用最稳定配置：只开启完成核心职责必需的能力。
-
-固定能力项：
-
-| 能力 | 默认 | 开启条件 |
+Fixed capability items:
+| Capability | 默认状态 | 启用条件 |
 |---|---:|---|
-| 阅读 | 开 | 大多数 agent 需要读取用户输入、项目文件、日志或已有配置。 |
-| 编辑 | 关 | 只有 agent 核心职责包含创建/修改文件、代码、配置或文档时开启。 |
-| 终端 | 关 | 只有 agent 必须运行命令、测试、构建、脚本或环境检查时开启。 |
-| 预览/浏览器 | 关 | 只有 agent 核心职责需要真实网页交互、页面预览、Console/Network/Performance 或浏览器自动化时开启。 |
-| 联网搜索 | 关 | 只有 agent 经常需要查当前外部资料、论文、官方文档、网页内容或实时信息时开启。 |
-| MCP / 专用能力 | 按需 | 只有该 MCP 是 agent 完成本职工作的主要工具时绑定。 |
+| Read | 开启 | 大多数 Agent 都需要读取输入、文件、日志或配置。 |
+| Edit | 关闭 | 仅当核心职责包含创建或修改文件、代码或文档时开启。 |
+| Terminal | 关闭 | 仅当该 Agent 必须运行命令、测试、构建、脚本或环境检查时开启。 |
+| Preview/Browser | 关闭 | 仅当核心职责需要真实网页交互、UI 测试或 Chrome DevTools 时开启。 |
+| Web Search | 关闭 | 仅当该 Agent 经常需要最新外部文档、论文或实时信息时开启。 |
+| MCP | 按需 | 仅当某个 MCP 是该 Agent 完成核心职责的主要工具时才绑定。 |
 
-以下稳定配置参考只用于内部判断，默认不要输出给用户：
+## Output Contract
 
-| Agent 类型 | 阅读 | 编辑 | 终端 | 预览/浏览器 | 联网搜索 | MCP / 专用能力 |
-|---|---:|---:|---:|---:|---:|---|
-| SOLO Coder / 主控 | 开 | 开 | 开 | 开 | 开 | 全局主控 |
-| Chrome DevTools / Web agent | 开 | 关 | 关 | 开 | 关 | Chrome DevTools MCP |
-| MATLAB 执行 agent | 开 | 开 | 关 | 关 | 关 | MATLAB MCP |
-| 项目知识图谱 agent | 开 | 关 | 关 | 关 | 关 | Knowledge Graph Memory MCP |
-| 深度学习研工 agent | 开 | 关 | 关 | 关 | 关 | 无固定 MCP |
-| Agent 蓝图设计 agent | 开 | 关 | 关 | 关 | 关 | 无固定 MCP |
-
-以下 Agent 蓝图设计 agent 自身推荐配置只用于内部参考，默认不要输出给用户：
-
-| 项目 | 配置 |
-|---|---|
-| 英文标识名 | `agent-blueprint-architect` |
-| 中文名称 | Agent蓝图设计师 |
-| 系统提示词 | 使用已内嵌 agent 蓝图设计规范的完整提示词 |
-| 阅读 | 开 |
-| 编辑 | 关 |
-| 终端 | 关 |
-| 预览/浏览器 | 关 |
-| 联网搜索 | 关 |
-| MCP / 专用能力 | 不绑定 |
-
-能力配置原则：
-
-- 不要让每个专科 agent 都拥有阅读、编辑、终端、浏览器和联网搜索
-- 编辑、终端、预览/浏览器、联网搜索都属于高影响能力，必须有明确任务理由才开启
-- 预览/浏览器不是通用"看结果"能力，只给需要真实网页或 Chrome DevTools 的 agent
-- MCP 不按工具名盲目绑定。只有当 MCP 支撑一个稳定、高频、专门工作流时，才作为专用能力绑定到 agent
-- 如果不确定是否开启某能力，默认关闭，并在 `能力开关配置` 的理由中简短说明可由 SOLO Coder 或其他专科 agent 接管
-
-## 输出格式
-
-始终按以下结构输出最终版：
+Always output the final version in this structure:
 
 ```markdown
 ## Agent Blueprint
 
-**中文名称:**
+**中文显示名:**
 \```text
-中文名称
+[Chinese Display Name]
 \```
 
-**系统提示词:**
+**System Prompt:**
 \```markdown
-# 角色
-
-[用一句话定义这个 agent 的精确职责。]
-
-# 职责范围
-
-你适合处理：
-- ...
-
-你不适合处理：
-- ...
-
-# 工作原则
-
-1. ...
-
-# 工作流
-
-1. ...
-
-# 工具策略
-
-[说明该 agent 应如何使用阅读、编辑、终端、浏览器、联网搜索或 MCP；不硬编码未确认存在的工具。]
-
-# 输出规范
-
-[定义这个 agent 最终回答时必须使用的结构。]
-
-# 失败处理
-
-- ...
+# Role
+...
+# Scope
+...
+# Working Principles
+...
+# Workflow
+...
+# Tool Strategy
+...
+# Output Contract
+...
+# Failure Handling
+...
 \```
 
-**英文标识名 (English Identifier):**
+**英文标识:**
 \```text
-kebab-case-id
+[kebab-case-id]
 \```
 
-**何时触发:**
+**触发说明:**
 \```text
-中文优先的一段话。说明适用场景、典型中文请求、必要英文关键词，以及不要触发的相邻场景。
+[Trigger Description in Chinese]
 \```
 
-**能力开关配置:**
-| 能力 | 状态 | 理由 |
+**能力配置:**
+| Capability | 状态 | 原因 |
 |---|---:|---|
-| 阅读 | 开/关 | ... |
-| 编辑 | 开/关 | ... |
-| 终端 | 开/关 | ... |
-| 预览/浏览器 | 开/关 | ... |
-| 联网搜索 | 开/关 | ... |
-| MCP / 专用能力 | 绑定/不绑定 | ... |
+| Read | [Enabled/Disabled] | ... |
+| Edit | [Enabled/Disabled] | ... |
+| Terminal | [Enabled/Disabled] | ... |
+| Preview/Browser | [Enabled/Disabled] | ... |
+| Web Search | [Enabled/Disabled] | ... |
+| MCP / Specialized Capability | [Bound/Unbound] | ... |
 
-**配置校验:**
-- 触发边界：
-- 能力最小化：
-- 重叠风险：
+**校验清单:**
+- Trigger 边界: ...
+- Capability 最小化: ...
+- Overlap 风险: 与 `discovering-subagent-capabilities` 发现的现有子代理对比，确认职责边界已明确区分，不存在模糊地带
+- 生成关闭: 明确告知用户通过 Trae UI 粘贴配置，不走文件系统或数据库路径
 ```
 
-`配置校验` 只写 2 到 3 条高价值结论，避免输出长篇解释、通用参考表或内部设计依据。不要再问"是否需要继续优化"，除非存在会改变 agent 方向的未决问题。
+Only write 2 to 3 high-value conclusions in `Validation Checklist`. Avoid outputting long explanations, generic reference tables, or internal design rationale. Do not ask "does it need more optimization" unless there are pending issues that would change the agent's direction.
 
-## 输出质量示例
+## Integration
 
-如果用户要创建 Web 自动化类 agent，触发描述应类似：
-
-```text
-当用户需要在真实网页中进行浏览器操作、网页自动化、UI/E2E 测试、页面功能分析、Console/Network/XHR/DOM 调试、性能检查或可访问性检查时使用。典型请求包括："分析这个页面功能""帮我自动点击/填写/验证流程""检查网页报错""分析 Network 请求"。不要在普通资料查询、纯文本总结、非网页代码开发、后端实现、产品策略讨论，或不需要浏览器环境的任务中使用。
-```
-
-这个示例只用于学习触发描述的粒度。不要把 Web 自动化内容套用到无关 agent。
-
-## 生成前检查
-
-输出前确认：
-
-- 英文标识名是合法 kebab-case
-- 中文名称具体、克制、能一眼看出职责
-- 触发描述中文优先，并包含正向与负向边界
-- 系统提示词采用"中文控制逻辑 + 英文技术锚点"的模式，除非用户明确要求英文
-- 这个 agent 只有一个核心职责
-- 能力开关遵循最小必要原则，尤其是编辑、终端、预览/浏览器和联网搜索没有无理由开启
-- 没有把 Trae Skill 或 `SKILL.md` 创建逻辑误写进 agent 配置
-- 已经完成一轮自检优化，输出的是最终可用版本，而不是待用户二次追问的草稿
-- 默认不要输出 `推荐配置参考` 表格或 `Agent 蓝图设计 agent 自身推荐配置` 表格；只有用户明确索要参考配置或自身配置时才输出
+- `discovering-subagent-capabilities`: Upstream — before designing a new agent, use this skill to discover existing subagents and check for overlap.
+- `skill-creator`: Adjacent — agent-blueprint-architect creates Trae **agents**; skill-creator creates Trae **Skills** (SKILL.md). Ensure the user's intent matches the right output type.

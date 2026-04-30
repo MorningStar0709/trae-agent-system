@@ -2,9 +2,11 @@
 """Lightweight Trae Skill stability scanner.
 
 The script finds repeatable review leads for Windows/Trae, Chinese-user fit,
-script synchronization, and packaging stability. It does not replace agent
-judgment: scan hits such as container-side POSIX commands or anti-pattern
-examples still need context review.
+script synchronization, and packaging stability across agent-facing Skill
+assets such as `SKILL.md`, templates, examples, references, and scripts.
+It does not replace agent judgment: scan hits such as container-side POSIX
+commands, anti-pattern examples, or mostly Chinese reference files still need
+context review before becoming final findings.
 """
 
 from __future__ import annotations
@@ -16,7 +18,7 @@ import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
 
 TEXT_SUFFIXES = {
@@ -161,6 +163,21 @@ def is_under_dir(skill_dir: Path, path: Path, dirname: str) -> bool:
     return dirname in relative_parts[:-1]
 
 
+def should_scan_structural_keys(skill_dir: Path, path: Path) -> bool:
+    if is_under_dir(skill_dir, path, "examples") or is_under_dir(skill_dir, path, "references"):
+        return False
+    lower_name = path.name.lower()
+    if lower_name.endswith("-prompt.md") or lower_name.endswith("-reviewer.md"):
+        return True
+    if lower_name in {"code-reviewer.md"}:
+        return True
+    try:
+        relative_parts = path.relative_to(skill_dir).parts
+    except ValueError:
+        return False
+    return relative_parts[:2] == ("resources", "sample-agents")
+
+
 def is_generated_path(path: Path) -> bool:
     return "__pycache__" in path.parts or path.suffix.lower() in {".pyc", ".pyo"}
 
@@ -228,6 +245,11 @@ def add_finding(
     )
 
 
+def severity_rank(severity: str) -> int:
+    order = {"low": 0, "medium": 1, "high": 2, "blocking": 3}
+    return order.get(severity, 0)
+
+
 def has_finding(review: SkillReview, rule_id: str, path: Path) -> bool:
     path_text = str(path)
     return any(finding.rule_id == rule_id and finding.path == path_text for finding in review.findings)
@@ -243,6 +265,25 @@ def frontmatter_description(skill_md: str) -> str:
         return ""
     desc = re.search(r"^description:\s*(.+)$", match.group(1), flags=re.M)
     return desc.group(1).strip() if desc else ""
+
+
+def quick_validate_covers_rule(rule_id: str) -> bool:
+    return rule_id in {
+        "missing_skill_md",
+        "missing_frontmatter",
+        "invalid_frontmatter_format",
+        "invalid_frontmatter",
+        "unexpected_frontmatter_keys",
+        "missing_name",
+        "missing_description",
+        "invalid_name_format",
+        "invalid_name_hyphen_usage",
+        "name_too_long",
+        "description_contains_angle_brackets",
+        "description_too_long",
+        "policy_missing_chinese_trigger",
+        "policy_chinese_heading",
+    }
 
 
 def scan_skill_md(review: SkillReview, skill_md_path: Path, text: str) -> None:
@@ -266,16 +307,6 @@ def scan_skill_md(review: SkillReview, skill_md_path: Path, text: str) -> None:
                 "description does not contain an explicit use trigger.",
                 "trigger_boundary",
             )
-        if not has_cjk(desc):
-            add_finding(
-                review,
-                "low",
-                "missing_chinese_trigger",
-                skill_md_path,
-                "description has no Chinese trigger phrase for Chinese-speaking users.",
-                "chinese_fit",
-            )
-
     if not re.search(r"Do Not Use|Do not use|do not use", text):
         add_finding(
             review,
@@ -298,9 +329,15 @@ def scan_skill_md(review: SkillReview, skill_md_path: Path, text: str) -> None:
         )
 
 
+def remove_markdown_fences(text: str) -> str:
+    """Replace all ```...``` blocks with blank lines to preserve line numbers."""
+    return re.sub(r"```[\s\S]*?```", lambda m: "\n" * m.group(0).count("\n"), text)
+
+
 def scan_text_patterns(review: SkillReview, path: Path, text: str) -> None:
     if review.name == "skill-stability-review" and path.name == "review_skills.py":
         return
+    reference_asset = has_review_override(text, "reference-asset")
 
     patterns = [
         ("unix_bash_fence", "medium", r"```bash", "Markdown uses a bash fence; confirm this is not host-side Windows guidance."),
@@ -311,9 +348,18 @@ def scan_text_patterns(review: SkillReview, path: Path, text: str) -> None:
         ("unix_rm_rf", "high", r"rm\s+-rf", "rm -rf is risky or invalid on Windows host; confirm whether it is container-side."),
         ("unix_home_tmp", "medium", r"(?<![\w:])(~\/|\/tmp\/)", "Unix-style host path appears; confirm whether it should be Windows or container-only."),
         ("ask_user_question", "medium", r"AskUserQuestion", "Legacy AskUserQuestion-style workflow may not fit current Trae execution."),
+        ("chinese_structural_key", "medium", r"^\s*\*\*(.*?)[\uff1a:]\*\*", "Markdown contains a structural key that may be Chinese; structural keys should be English."),
     ]
     for rule_id, severity, pattern, message in patterns:
-        for match in re.finditer(pattern, text):
+        scan_target = remove_markdown_fences(text) if rule_id == "chinese_structural_key" else text
+        for match in re.finditer(pattern, scan_target, flags=re.M):
+            if rule_id == "chinese_structural_key":
+                if not should_scan_structural_keys(review.path, path):
+                    continue
+                if not has_cjk(match.group(1)):
+                    continue
+            if reference_asset and rule_id.startswith("unix_"):
+                continue
             line = line_number(text, match.start())
             if is_self_documentation_pattern(review, path, text, line):
                 continue
@@ -377,6 +423,10 @@ def has_structured_output(text: str) -> bool:
     return bool(re.search(r"json\.dumps|JSON\.stringify|ConvertTo-Json|Write-Output|print\s*\(", text))
 
 
+def has_review_override(text: str, marker: str) -> bool:
+    return bool(re.search(rf"review:\s*{re.escape(marker)}\b", text, flags=re.I))
+
+
 def scan_scripts(review: SkillReview, skill_dir: Path, max_file_bytes: int) -> None:
     script_files: list[Path] = []
     for path in skill_dir.rglob("*"):
@@ -428,7 +478,13 @@ def scan_scripts(review: SkillReview, skill_dir: Path, max_file_bytes: int) -> N
             continue
         if not is_script_like(skill_dir, path, text):
             continue
-        if not has_failure_path(text):
+        skip_failure_path = has_review_override(text, "reference-asset") or has_review_override(
+            text, "skip-failure-path"
+        )
+        skip_structured_output = has_review_override(
+            text, "reference-asset"
+        ) or has_review_override(text, "allow-human-readable-output")
+        if not skip_failure_path and not has_failure_path(text):
             add_finding(
                 review,
                 "medium",
@@ -438,7 +494,7 @@ def scan_scripts(review: SkillReview, skill_dir: Path, max_file_bytes: int) -> N
                 "script_sync",
                 needs_context_review=True,
             )
-        if not has_structured_output(text):
+        if not skip_structured_output and not has_structured_output(text):
             add_finding(
                 review,
                 "low",
@@ -478,7 +534,7 @@ def run_quick_validate(review: SkillReview, quick_validate: Path | None, timeout
         return
     try:
         completed = subprocess.run(
-            [sys.executable, str(quick_validate), str(review.path)],
+            [sys.executable, str(quick_validate), "--json", str(review.path)],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -499,12 +555,36 @@ def run_quick_validate(review: SkillReview, quick_validate: Path | None, timeout
             "agent_executability",
         )
         return
+    parsed: dict[str, Any] | None = None
+    output_text = completed.stdout.strip()
+    try:
+        parsed = json.loads(output_text) if output_text else None
+    except json.JSONDecodeError:
+        parsed = None
+
     review.validation = {
         "quick_validate": "pass" if completed.returncode == 0 else "fail",
         "returncode": completed.returncode,
-        "output": completed.stdout.strip(),
+        "output": output_text,
+        "parsed": parsed,
     }
-    if completed.returncode != 0:
+
+    if parsed and isinstance(parsed.get("issues"), list):
+        for issue in parsed["issues"]:
+            if not isinstance(issue, dict):
+                continue
+            add_finding(
+                review,
+                str(issue.get("severity", "medium")),
+                str(issue.get("rule_id", "quick_validate_issue")),
+                review.path / "SKILL.md",
+                str(issue.get("message", "quick_validate reported an issue.")),
+                str(issue.get("dimension", "agent_executability")),
+                issue.get("line") if isinstance(issue.get("line"), int) else None,
+                needs_context_review=False,
+            )
+
+    if completed.returncode != 0 and not (parsed and isinstance(parsed.get("issues"), list) and parsed["issues"]):
         add_finding(
             review,
             "blocking",
@@ -516,6 +596,14 @@ def run_quick_validate(review: SkillReview, quick_validate: Path | None, timeout
 
 
 def compute_scores(review: SkillReview) -> None:
+    deduped_findings: dict[tuple[str, str, int | None], Finding] = {}
+    for finding in review.findings:
+        key = (finding.rule_id, finding.path, finding.line)
+        existing = deduped_findings.get(key)
+        if existing is None or severity_rank(finding.severity) > severity_rank(existing.severity):
+            deduped_findings[key] = finding
+    review.findings = list(deduped_findings.values())
+
     for finding in review.findings:
         if finding.needs_context_review:
             continue
@@ -700,6 +788,8 @@ def render_markdown(reviews: list[SkillReview]) -> str:
     grouped: dict[str, list[tuple[SkillReview, Finding]]] = {key: [] for key in ["blocking", "high", "medium", "low"]}
     for review in reviews:
         for finding in review.findings:
+            if finding.rule_id == "quick_validate_failed" and review.validation.get("parsed"):
+                continue
             grouped[finding.severity].append((review, finding))
 
     for severity in ["blocking", "high", "medium", "low"]:

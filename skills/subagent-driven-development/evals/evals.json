@@ -1,0 +1,35 @@
+{
+  "skill_name": "subagent-driven-development",
+  "evals": [
+    {
+      "id": "golden-independent-tasks-with-real-implementers",
+      "prompt": "这份实现计划已经写好了，任务之间基本独立，而且当前环境可以稳定使用实现型子代理，按任务拆给子代理做。",
+      "expected_output": "触发 subagent-driven-development；先确认实现型子代理可用；按任务推进实现、规格审查、代码质量审查；最终输出固定汇报骨架。",
+      "files": []
+    },
+    {
+      "id": "boundary-no-real-implementer-subagents",
+      "prompt": "这份计划可以拆任务，但当前环境只有搜索型和审查型子代理，你还是用子代理驱动开发吧。",
+      "expected_output": "不应继续使用 subagent-driven-development；应明确说明当前环境不满足前提，并回退到 executing-plans。",
+      "files": []
+    },
+    {
+      "id": "boundary-tightly-coupled-tasks",
+      "prompt": "按这份计划做，但这些任务共享同一批上下文和文件状态，最好别拆散。",
+      "expected_output": "默认不优先触发 subagent-driven-development；应指出任务强耦合，更适合 executing-plans。",
+      "files": []
+    },
+    {
+      "id": "regression-review-loop-required",
+      "prompt": "用子代理驱动执行这份计划；如果规格审查发现问题，修好后再继续，不要跳过复审。",
+      "expected_output": "触发 subagent-driven-development；规格审查不通过时返回实现修复，并重新执行规格审查；不能直接进入代码质量审查。",
+      "files": []
+    },
+    {
+      "id": "regression-blocked-task-reporting",
+      "prompt": "按任务派子代理做；如果第三个任务因为缺少上下文卡住，就如实汇报，不要装作全部完成。",
+      "expected_output": "触发 subagent-driven-development；在任务阻塞时把总体状态写成部分完成或阻塞，并明确卡住的任务、原因和下一步。",
+      "files": []
+    }
+  ]
+}

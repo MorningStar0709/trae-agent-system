@@ -1,6 +1,6 @@
 ---
 name: skill-stability-review
-description: Review complete Trae Skill packages, including SKILL.md plus related scripts, resources, references, and templates, for Windows/Trae adaptation, Chinese-user fit, trigger boundaries, execution stability, script synchronization, and over-localization risks. Use when the user asks to 审查 skill, 扫描 skills, 优化 Win/Trae 适配, 检查中文适配, 提升稳定性, 检查脚本同步适配, 检查 scripts, or review Skill package readiness for Chinese-speaking Windows Trae users.
+description: Use only when the user wants to review Trae Skill packages or SKILL.md files, including related scripts, resources, references, templates, config examples, trigger boundaries, Windows/Trae adaptation, Chinese-user fit, execution stability, script synchronization, and over-localization risks inside a Skill package. Typical Chinese requests include "审查这个 skill", "扫描 skills", "检查这个 SKILL.md", "评估这个 Trae Skill 是否稳定", or "检查 skill 的脚本同步适配". Do not use for ordinary project review, code review, repository readiness, git/GitHub push standards, release checks, general script checks, general Chinese writing polish, or non-Skill stability reviews unless the target is explicitly a Trae Skill package or SKILL.md.
 ---
 
 # Skill Stability Review
@@ -13,21 +13,23 @@ The reviewer is the agent. No human review step is required unless the user expl
 
 ## Use This Skill
 
-Use this Skill when the user asks to:
+Use this Skill when the user asks to review Trae Skill packages or `SKILL.md` files:
 
 - Review one or more Trae Skills for Windows, Trae, or Chinese-user adaptation.
 - Scan `SKILL.md` files for trigger quality, boundaries, workflow clarity, and failure handling.
 - Check whether related scripts, references, resources, templates, and config examples match the instructions in `SKILL.md`.
-- Audit `scripts/`, `references/`, `resources/`, and `templates/` for Windows host compatibility, machine-readable output, script exit behavior, shell assumptions, path examples, and over-localization risks.
-- Detect Unix-only assumptions in a Windows Trae environment.
-- Detect over-localization that harms machine readability or script stability.
+- Audit Skill-package `scripts/`, `references/`, `resources/`, and `templates/` for Windows host compatibility, machine-readable output, script exit behavior, shell assumptions, path examples, and over-localization risks.
+- Detect Unix-only assumptions inside Trae Skill instructions or Skill-bundled scripts.
+- Detect over-localization that harms Skill machine readability or Skill script stability.
 - Rate Skills for readiness, stability, or suitability for Chinese-speaking users.
-- Turn a general skill/rule language policy into concrete review criteria.
+- Turn a general Skill language policy into concrete Skill-package review criteria.
 
 Do not use this Skill when:
 
 - The user wants to create a new Skill from scratch; use `skill-creator` unless the task is specifically a stability review.
 - The user asks for ordinary application code review unrelated to Trae Skills.
+- The user asks to scan an ordinary project or repository for git/GitHub push readiness, release readiness, CI readiness, test coverage, code quality, security, or general stability.
+- The user asks to inspect ordinary project scripts, build files, docs, or configuration that are not part of a Trae Skill package.
 - The task is library/API documentation lookup; use the docs workflow instead.
 - The request is only about general Chinese writing quality and not agent execution stability.
 
@@ -43,13 +45,38 @@ Review with this hierarchy:
 4. Maintainability and minimal ambiguity.
 5. Language polish.
 
-Do not penalize English technical text just because the user is Chinese. Penalize only when language choice harms trigger stability, execution accuracy, machine readability, or user communication.
+All reviews must enforce the repository-wide `skills/skill-language-policy/SKILL.md`. Do not penalize English technical text just because the user is Chinese. Penalize only when language choice harms trigger stability, execution accuracy, machine readability, or user communication.
 
 Use this rule of thumb:
 
 ```text
 中文负责意图和沟通，英文负责接口和执行，结构化输出负责稳定性。
 ```
+
+## Asset Classification
+
+Review every file in a Skill package as an agent asset first, not as human-facing prose first.
+
+Classify each file before judging language or style:
+
+- `trigger asset`: improves auto-invocation and request matching
+- `execution contract`: defines ordered steps, inputs, outputs, and failure handling
+- `template/prompt asset`: gives the agent reusable slots, schemas, or prompt skeletons
+- `reference asset`: supplies supporting patterns, examples, or detailed context
+- `human-oriented example`: demonstrates behavior, but should not be the only place where critical execution rules live
+
+Use this decision rule:
+
+- Do not treat "mostly Chinese" as a defect by itself.
+- Treat it as a defect only when language or structure harms trigger stability, contract clarity, machine readability, field stability, tool usage, or execution reliability.
+- Do not reward English prose by default if it makes the asset less actionable for the agent.
+
+When reviewing a file, ask in this order:
+
+1. What asset type is this file?
+2. Does its structure help the agent extract stable instructions or interfaces?
+3. Is any machine-sensitive layer incorrectly localized or ambiguously phrased?
+4. Only then decide whether language or presentation needs adjustment.
 
 ## Inputs
 
@@ -83,8 +110,30 @@ Use progressive disclosure:
 - Read `SKILL.md` first.
 - Then inspect only files referenced by `SKILL.md` and files in conventional execution locations such as `scripts/`.
 - For large reference folders, sample or search for command-bearing files before reading everything.
+- When a file under `examples/`, `templates/`, or `resources/` is mostly Chinese, do not treat that alone as a finding; first classify whether it acts as a trigger asset, execution contract, template asset, reference asset, or human-oriented example.
 
 ## Review Criteria
+
+### 0. Asset Type And Role
+
+Check:
+
+- The file's job is identifiable: trigger asset, execution contract, template/prompt asset, reference asset, or human-oriented example.
+- Critical execution rules do not live only inside a human-oriented example.
+- Template and contract files are structured for extraction rather than written as long-form essays.
+- Chinese content is not penalized unless it harms machine-sensitive layers or execution reliability.
+
+Common mistake:
+
+```text
+Seeing a mostly Chinese Markdown file and flagging it only because it is not English.
+```
+
+Correct judgment:
+
+```text
+First determine whether the file is a trigger sample, prompt/template, contract, reference, or human-oriented example. Then evaluate whether its language and structure help or hurt agent execution.
+```
 
 ### 1. Trigger And Boundary
 
@@ -226,7 +275,7 @@ Flag these as findings:
 1. Identify target files: list `SKILL.md` files and related files under `scripts/`, `references/`, `resources/`, and `templates/`.
 2. When available, run `scripts/review_skills.py` to get repeatable scan leads and preliminary ratings.
 3. Read each `SKILL.md` first. Do not bulk-read long resource files unless referenced by the Skill or needed for evidence.
-4. Map the Skill's intended job, trigger phrases, required tools, scripts, outputs, and failure paths.
+4. Map the Skill's intended job, trigger phrases, required tools, scripts, outputs, failure paths, and the asset type of each important related file.
 5. Inspect related scripts for Windows host compatibility, exit code behavior, JSON/CLI stability, and over-localization.
 6. Use the script output as evidence, not as the final agent judgment. Resolve `needs_context_review` hits by reading the surrounding file context.
 7. Rate each Skill using the rating scale below.

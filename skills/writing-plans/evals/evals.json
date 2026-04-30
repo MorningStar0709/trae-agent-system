@@ -1,0 +1,47 @@
+{
+  "skill_name": "writing-plans",
+  "evals": [
+    {
+      "id": "golden-from-approved-spec",
+      "prompt": "规格已经定了，先别写代码，帮我写一份实现计划，拆到文件、测试和验证步骤。",
+      "expected_output": "触发 writing-plans；输出面向实现的多步骤计划；包含文件结构、任务拆分、前置依赖、完成信号、测试与验证路径；最终回复使用固定交接骨架；不直接进入编码。",
+      "files": []
+    },
+    {
+      "id": "golden-from-brainstorming-handoff",
+      "prompt": "我们刚把方案讨论清楚了，下一步请把它整理成可执行实现计划。",
+      "expected_output": "触发 writing-plans；承接已收敛设计；生成可交给 executing-plans 或 subagent-driven-development 的计划；默认先给出明确执行推荐，再给出备选方式。",
+      "files": []
+    },
+    {
+      "id": "boundary-small-direct-change",
+      "prompt": "把页脚年份改成 2026 就行，不需要写计划。",
+      "expected_output": "不触发 writing-plans；这是边界清晰的小改动，应直接实现。",
+      "files": []
+    },
+    {
+      "id": "boundary-still-ambiguous",
+      "prompt": "我想做个知识库，但还没想好首页放什么，先帮我想想。",
+      "expected_output": "不触发 writing-plans；需求仍模糊，应先使用 brainstorming 澄清范围、结构和目标。",
+      "files": []
+    },
+    {
+      "id": "regression-execution-phase",
+      "prompt": "计划已经写好了，按这个计划继续做。",
+      "expected_output": "不触发 writing-plans；当前是在执行现有计划，应转向 executing-plans 或 subagent-driven-development。",
+      "files": []
+    },
+    {
+      "id": "regression-fallback-guidance",
+      "prompt": "给我一份详细计划，后面我会在没有实现型子代理的环境里执行。",
+      "expected_output": "触发 writing-plans；在执行交接中明确优先使用 executing-plans；固定回复骨架中要写明推荐理由和下一步；不应硬编码依赖不存在的旧平台能力名称。",
+      "files": []
+    },
+    {
+      "id": "regression-partial-context-limited-plan",
+      "prompt": "需求基本定了，但我还没确认具体模块路径。先基于现有约束写计划，并标出待确认区域。",
+      "expected_output": "触发 writing-plans；允许生成受限计划；明确哪些区域待确认、哪些部分可先执行；不能把核心实现决策写成模糊占位符。",
+      "files": []
+    }
+  ]
+}

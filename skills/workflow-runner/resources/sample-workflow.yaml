@@ -1,0 +1,29 @@
+name: sample-multi-role-review
+agents_dir: sample-agents
+inputs:
+  - name: topic
+    required: true
+    default: ""
+  - name: context
+    required: false
+    default: "未提供额外上下文"
+steps:
+  - id: framing
+    role: analysis/researcher
+    task: "围绕 {{topic}} 提炼目标、用户价值和关键约束。补充上下文：{{context}}"
+    output: framing_notes
+  - id: solution-pass
+    role: design/architect
+    task: "基于 {{framing_notes}} 给出实现或方案方向，突出结构化取舍。"
+    depends_on: [framing]
+    output: solution_notes
+  - id: risk-pass
+    role: review/risk-critic
+    task: "基于 {{framing_notes}} 识别主要风险、缺口和需要补充的验证项。"
+    depends_on: [framing]
+    output: risk_notes
+  - id: synthesis
+    role: synthesis/editor
+    task: "综合 {{solution_notes}} 与 {{risk_notes}}，输出最终多角色结论与建议。"
+    depends_on: [solution-pass, risk-pass]
+    output: final_review

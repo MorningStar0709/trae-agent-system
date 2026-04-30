@@ -43,7 +43,42 @@ Every Skill must make these three things explicit:
 - How: the ordered procedure Trae should follow, including checks, tools, scripts, and fallback paths.
 - What: the expected output format, artifacts, success criteria, and failure response.
 
+All new or updated Skills must comply with `skills/skill-language-policy/SKILL.md`.
+
 Do not treat a Skill as a one-off prompt or human-facing article. Write it as operational guidance for an AI agent.
+
+## Agent-First Asset Model
+
+Treat every file in a Skill package as a potential execution asset for the agent, not as human-facing documentation by default.
+
+Before creating, importing, or rewriting files, classify each file by its primary job:
+
+- `trigger asset`: improves auto-invocation and request matching
+- `execution contract`: defines ordered steps, inputs, outputs, success criteria, and failure handling
+- `template/prompt asset`: provides reusable skeletons, slots, or structured prompts the agent can fill
+- `reference asset`: supplies supporting patterns, deeper examples, schemas, or domain context loaded on demand
+- `human-oriented example`: shows representative behavior, but should not carry critical execution rules on its own
+
+Apply this priority order when deciding what to write or rewrite:
+
+1. Trigger stability
+2. Execution contract clarity
+3. Machine readability and schema stability
+4. Human readability
+
+Do not rewrite files just because they look "too Chinese" or "not international enough". Rewrite only when the current language or structure harms trigger matching, boundary clarity, structure extraction, field stability, tool usage, or execution reliability.
+
+Prefer English or original form for machine-sensitive layers:
+
+- frontmatter keys and `description`
+- commands, file paths, tool names, API names, config keys, JSON keys, environment variables
+- template placeholders, output fields, and script interfaces
+
+Chinese is acceptable or preferred when it improves:
+
+- natural trigger examples for Chinese-speaking users
+- concise explanation of constraints, steps, and failure handling
+- user-facing summaries that do not alter machine-sensitive structure
 
 ## Target Structure
 
@@ -65,9 +100,9 @@ Only `SKILL.md` is required. Create optional directories only when they directly
 
 Use Trae's canonical optional directories by default:
 
-- `examples/`: representative input/output examples.
-- `templates/`: reusable files copied or adapted into final outputs.
-- `resources/`: reference docs, scripts, style guides, schemas, or other supporting files.
+- `examples/`: trigger assets, behavior examples, or human-oriented examples.
+- `templates/`: reusable template/prompt assets copied or adapted into final outputs.
+- `resources/`: reference assets, scripts, style guides, schemas, or other supporting files.
 
 ## Frontmatter Rules
 
@@ -334,7 +369,7 @@ VALID OPTIONS:
 ## Trae-Specific Guidance
 
 - Project Skills live in the current project's `.trae/skills/` directory.
-- Global Skills for international Trae live in the user's `.trae/skills/` directory, such as `%userprofile%/.trae/skills` on Windows or `~/.trae/skills` on macOS/Linux.
+- Global Skills for international Trae live in the user's `.trae/skills/` directory, such as `%userprofile%/.trae/skills` on Windows or the user's home `.trae/skills` directory on macOS/Linux.
 - In this workspace, the user is editing `C:\Users\skyler\.trae\skills`; treat it as the explicit Trae Skills target path.
 - Ask whether a new Skill should be project-level or global only when the target location is not provided and the choice affects behavior.
 - If creating a project Skill from inside a repository, prefer `<project>/.trae/skills/<skill-name>/SKILL.md`.

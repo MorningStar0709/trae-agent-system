@@ -1,0 +1,47 @@
+{
+  "skill_name": "executing-plans",
+  "evals": [
+    {
+      "id": "golden-sequential-plan-execution",
+      "prompt": "这份实现计划已经写好了，按计划逐任务推进，并保留检查点。",
+      "expected_output": "触发 executing-plans；先审查计划可执行性，再顺序执行任务，使用 TodoWrite 跟踪进度并在阻塞时停下来确认；最终输出固定执行报告骨架。",
+      "files": []
+    },
+    {
+      "id": "golden-fallback-without-implementation-subagents",
+      "prompt": "当前环境没有可靠的实现型子代理，你就按这份计划在当前会话里执行。",
+      "expected_output": "触发 executing-plans；作为 subagent-driven-development 的回退路径顺序执行，不应因为缺少实现型子代理而阻塞。",
+      "files": []
+    },
+    {
+      "id": "boundary-no-written-plan",
+      "prompt": "我想做个导入功能，但还没想清楚该怎么拆。",
+      "expected_output": "不触发 executing-plans；当前没有书面计划，应先用 brainstorming 或 writing-plans。",
+      "files": []
+    },
+    {
+      "id": "boundary-better-for-subagents",
+      "prompt": "这份计划拆成了 8 个相互独立的小任务，而且当前环境可以稳定使用实现型子代理，直接按最合适方式执行。",
+      "expected_output": "默认不优先触发 executing-plans；应优先考虑 subagent-driven-development。",
+      "files": []
+    },
+    {
+      "id": "regression-review-before-execution",
+      "prompt": "按这份计划做，但如果计划里验证条件不清晰，你先提出来。",
+      "expected_output": "触发 executing-plans；执行前先做批判性审查，发现验证缺口或环境假设时先向用户确认，不直接硬做；审查阶段使用固定审查输出结构。",
+      "files": []
+    },
+    {
+      "id": "regression-finish-report-without-forced-finish-skill",
+      "prompt": "把这份计划执行完，最后给我执行报告；如果我没说提交，就先别提交。",
+      "expected_output": "触发 executing-plans；完成后输出总结、验证结果、偏离项和下一步；未获用户要求时不强制进入额外提交或旧收尾 skill。",
+      "files": []
+    },
+    {
+      "id": "regression-blocked-execution-report",
+      "prompt": "按这份计划执行，如果中途因为缺少 Redis 配置卡住，就如实汇报状态，不要装作做完。",
+      "expected_output": "触发 executing-plans；在遇到缺失依赖时转入阻塞或部分完成状态；最终报告中明确剩余任务、阻塞原因和建议动作。",
+      "files": []
+    }
+  ]
+}

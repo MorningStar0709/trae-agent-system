@@ -1,9 +1,9 @@
 ---
 alwaysApply: false
-description: Use this rule when editing a specific kind of code or performing a specific workflow
+description: [在此用英文简短描述该规则应当被激活的场景]
 ---
 
-# Rule Title
+# [在此填写规则名称]
 
-- Replace this line with scenario-specific guidance.
-- Make the description concrete enough for Trae to decide when to use the rule.
+- [执行这个具体操作]
+- [避免这种具体错误模式]

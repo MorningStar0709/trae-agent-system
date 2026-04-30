@@ -2,7 +2,7 @@
 alwaysApply: true
 ---
 
-# Rule Title
+# [在此填写规则名称]
 
-- Replace this line with a universal project constraint.
-- Keep the rule focused and non-conflicting.
+- [全局适用的约束 1]
+- [全局适用的约束 2]

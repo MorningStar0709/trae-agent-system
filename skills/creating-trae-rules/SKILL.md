@@ -9,6 +9,15 @@ Use this Skill to produce rules that are valid for Trae IDE and easy for Trae to
 
 When the user writes in Chinese, discuss choices and final summaries in Simplified Chinese. Keep file names, frontmatter keys, glob patterns, and code identifiers in their original form.
 
+## Do Not Use
+
+Do not use this Skill when:
+
+- The user wants general project documentation, prompt writing, or one-off notes that are not intended to become Trae rules.
+- The task is ordinary code editing, debugging, or refactoring unrelated to `.trae/rules`, `AGENTS.md`, `CLAUDE.md`, or git message rules.
+- The user is asking for broad workflow advice without asking to create, modify, organize, or review actual rule files.
+- The request is about editing Skills instead of rules; use the Skill workflow for `SKILL.md` and related Skill assets.
+
 ## Inputs
 
 Collect or infer:
@@ -40,7 +49,7 @@ Ask one concise question only when the target path or rule purpose is impossible
    - Manual only: set `alwaysApply: false` and omit `globs` and `description` unless the user explicitly wants metadata for clarity.
    - Commit message: add `scene: git_message`; this can coexist with `alwaysApply`, `description`, and `globs`.
 4. Write the rule with YAML frontmatter followed by Markdown instructions.
-5. Keep each rule focused. Split rules when one file mixes unrelated concerns such as UI style, API design, testing, and commit messages.
+5. Keep each rule focused. Split rules when one file mixes unrelated concerns such as UI style, API design, testing, and commit messages. When a file exceeds the line limit (50 for rules, 30 for alwaysApply), apply the Line Limit Decision Strategy from `resources/trae-rules-reference.md`: identify whether it contains multiple independent concerns (split) or a single coherent concern (keep). Never delete actionable content just to meet a line count.
 6. Validate:
    - Frontmatter is bounded by `---`.
    - Boolean fields are real booleans, not quoted strings.
@@ -68,14 +77,14 @@ Use this structure:
 ```markdown
 ---
 alwaysApply: false
-description: Brief scenario where Trae should use this rule
+description: [触发此规则的简短场景描述]
 ---
 
-# Rule Title
+# [规则名称]
 
-- Do this concrete thing.
-- Avoid this concrete failure mode.
-- Prefer this local convention when choices are otherwise equivalent.
+- [执行这个具体操作]
+- [避免这种具体错误模式]
+- [在这个场景下，优先使用此本地约定]
 ```
 
 Write instructions as actionable constraints, not explanations about why the rule exists. Prefer bullets that Trae can follow during execution.
@@ -119,3 +128,19 @@ Do not create rules below the fourth nested level under `.trae/rules/`; Trae rec
 - Personal rule request: provide the rule text and tell the user it belongs in Trae settings, not `.trae/rules`.
 - Unknown activation mode: choose intelligent apply for scenario-specific guidance, specific-files for file-pattern guidance, always apply only for truly universal constraints, and manual only for rarely needed specialist guidance.
 - Commit message rule already exists: update the existing `scene: git_message` rule instead of creating a duplicate unless the user asks for multiple commit rules.
+
+## Output Contract
+
+```markdown
+## 规则创建/更新结果
+
+**文件路径:** `.trae/rules/...`
+
+**规则意图:**
+- [简述规则的核心目的]
+
+**覆盖范围:**
+- [受影响的文件或场景]
+
+**下一步:** [如无则写 "- 无"]
+```

@@ -24,10 +24,16 @@
 
 ## 页面结构
 
-项目包含两个入口页面：
+项目入口页面位于根目录：
 
-- **英文版**: `index.html` - GitHub Pages 默认首页
-- **中文版**: `docs/index.html` - 中文介绍页面
+- **入口页面**: `index.html` - GitHub Pages 首页
+
+文档位于 `docs/` 目录，包含完整的中英双语文档：
+- [docs/01-intro_zh.md](docs/01-intro_zh.md) - 中文极简介绍
+- [docs/02-overview_zh.md](docs/02-overview_zh.md) - 中文亮点介绍
+- [docs/03-components_zh.md](docs/03-components_zh.md) - 中文组件速查
+- [docs/04-design_zh.md](docs/04-design_zh.md) - 中文设计思路
+- [docs/05-architecture_zh.md](docs/05-architecture_zh.md) - 中文完整架构
 
 ## 页面特性
 

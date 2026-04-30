@@ -1,0 +1,41 @@
+{
+  "skill_name": "brainstorming",
+  "evals": [
+    {
+      "id": "golden-feature-design",
+      "prompt": "先别写代码，帮我头脑风暴一个团队知识库首页，比较两三种信息架构方案并推荐一个。",
+      "expected_output": "触发 brainstorming；先澄清目标和约束；比较 2-3 种方案；给出推荐方案和设计结论；默认使用固定设计摘要骨架，不直接跳到实现。",
+      "files": []
+    },
+    {
+      "id": "golden-architecture-clarification",
+      "prompt": "我想做一个包含审批流和通知中心的后台系统，先一起梳理模块边界和数据流。",
+      "expected_output": "触发 brainstorming；先识别多模块设计问题；围绕边界、约束和成功标准逐步澄清，再输出设计建议。",
+      "files": []
+    },
+    {
+      "id": "boundary-already-clear-small-task",
+      "prompt": "把这个按钮文案从 Submit 改成 Save 就行，不需要讨论方案。",
+      "expected_output": "不触发 brainstorming；这是边界清晰的小改动，应直接实现或直接处理。",
+      "files": []
+    },
+    {
+      "id": "boundary-direct-fact-question",
+      "prompt": "React 的 useMemo 是干什么的？",
+      "expected_output": "不触发 brainstorming；这是直接事实或用法说明，应直接回答。",
+      "files": []
+    },
+    {
+      "id": "regression-missing-planning-skill",
+      "prompt": "先帮我把这个新功能方案想清楚，确认后再进入计划。",
+      "expected_output": "触发 brainstorming；完成设计后若需要进入计划，优先衔接 writing-plans；只有当前环境没有该 skill 时，才在当前对话中直接输出实现计划。",
+      "files": []
+    },
+    {
+      "id": "regression-visual-companion-offer",
+      "prompt": "帮我设计一个落地页 hero 区，想先看看两种布局原型。",
+      "expected_output": "触发 brainstorming；在环境支持时，可先用一条独立消息提议 visual companion；如果环境不支持，则继续纯文本设计，不阻塞流程。",
+      "files": []
+    }
+  ]
+}

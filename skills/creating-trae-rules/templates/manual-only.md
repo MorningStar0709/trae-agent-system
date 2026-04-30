@@ -2,7 +2,7 @@
 alwaysApply: false
 ---
 
-# Rule Title
+# [在此填写规则名称]
 
-- Replace this line with specialist guidance that should apply only when referenced with #Rule.
-- Keep the title easy to recognize when manually selecting the rule.
+- [仅在用户使用 @ 明确提及本规则时才会执行的约束 1]
+- [约束 2]

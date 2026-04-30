@@ -1,4 +1,4 @@
-# Trae Skills Collection
+# Trae AI Agent 操作系统
 
 [![Platform](https://img.shields.io/badge/platform-Windows-blue?style=flat-square)](https://www.trae.ai/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
@@ -9,61 +9,69 @@
 
 ## About This Project
 
-**Trae Skills** is a curated collection of custom skills designed specifically for [Trae IDE](https://www.trae.ai/) on Windows. These skills help developers automate repetitive tasks, establish development rules, and optimize coding workflows with a focus on Windows environment compatibility.
+**Trae AI Agent OS** is an AI Agent enhancement system for [Trae IDE](https://www.trae.ai/). It provides Rule-based routing, professional Skills, and persistent Memory capabilities — transforming your Agent from "can do anything but unstable" to "fast when simple, rigorous when complex, always learning".
+
+## Architecture
+
+```
+User Input → Rules (Routing & Constraints) → Skills (Execution) → Memory (Learning)
+```
+
+| Layer | Count | Responsibility |
+|:------|:------|:---------------|
+| **Rules** | 8 | Routing decisions, behavior constraints, environment handling |
+| **Skills** | 35 | Professional toolboxes covering design → coding → debugging → commit → completion |
+| **Memory** | Core Memory | Cross-session knowledge accumulation |
 
 ## Core Features
 
-- **Windows-First Design**: Thoroughly tested and optimized for Windows environments
-- **Chinese User Support**: Native Simplified Chinese with balanced English technical anchors
-- **Stable Execution**: Comprehensive validation scripts ensure reliable agent behavior
-- **Production-Ready**: Built-in stability review tools and validation workflows
-
-## Skills Included
-
-| Skill | Description |
-|---|---|
-| **agent-blueprint-architect** | Create and optimize Trae agent configurations with clear boundaries and triggers |
-| **creating-trae-rules** | Define and organize Trae project rules with multiple activation modes |
-| **skill-creator** | Scaffold, review, and iterate on new Trae skills |
-| **skill-stability-review** | Audit skills for Windows/Trae compatibility and execution stability |
+- **T-Shirt Sizing**: Automatic task classification (S/M/L) — small tasks are fast, large tasks are thorough
+- **Closed-Loop Quality**: Every skill produces verifiable evidence — no "should be fine" allowed
+- **Self-Improvement**: Lessons learned are stored in Core Memory — never repeat the same mistake
+- **Chinese Team Ready**: Native Chinese triggers, domestic Git platform support, bilingual skill files
+- **Windows Native**: PowerShell commands, port conflict recovery, path conventions
 
 ## Quick Start
 
 ### Installation
 
-```powershell
-# Clone the repository
-git clone https://github.com/MorningStar0709/trae-skills.git
-cd trae-skills
+Copy the `.trae/` directory to your Trae project root. No plugins or scripts required.
 
-# Import to Trae
-# Open Trae IDE → Settings → Skills Management → Import from skills/ directory
-```
+### Try These Commands
 
-### Validation
-
-```powershell
-# Validate a specific skill
-python skills/skill-creator/scripts/quick_validate.py skills/<skill-name>
-
-# Scan for Windows compatibility
-python skills/skill-stability-review/scripts/review_skills.py --skill skills/<skill-name> --markdown
-```
+> "帮我排查这个报错" (Help me debug this error)
+> "先写计划再实现" (Write a plan first, then implement)
+> "改好了没？验证一下" (Is it fixed? Verify it)
+> "帮我提交" (Help me commit)
+> "记住这个处理方式" (Remember this approach)
 
 ## Documentation
 
-For detailed technical documentation, see [docs/SKILLS_INTRO.md](docs/SKILLS_INTRO.md).
+| Doc | Description |
+|:----|:------------|
+| [docs/01-intro.md](docs/01-intro.md) | 15-second overview |
+| [docs/02-overview.md](docs/02-overview.md) | Features & highlights (3 min) |
+| [docs/03-components.md](docs/03-components.md) | Component quick reference (5 min) |
+| [docs/04-design.md](docs/04-design.md) | Design decisions & rationale (5 min) |
+| [docs/05-architecture.md](docs/05-architecture.md) | Complete architecture & workflows (15 min) |
 
-For Chinese documentation, see [docs/SKILLS_INTRO_zh.md](docs/SKILLS_INTRO_zh.md).
+## Skill Paths
+
+| Path | Skills |
+|:-----|:-------|
+| **Design & Planning** | brainstorming → writing-plans → executing-plans / subagent-driven-development |
+| **Debugging & Quality** | systematic-debugging → test-driven-development → verification-before-completion |
+| **Completion & Evolution** | git-commit → finishing-a-development-branch → self-improvement |
+| **Orchestration** | dispatching-parallel-agents, workflow-runner, find-docs |
+| **Browser & Frontend** | chrome-devtools, frontend-design, chart-visualization, a11y-debugging |
+| **Meta Skills** | skill-creator, skill-stability-review, skill-language-policy, creating-trae-rules |
 
 ## Windows/Trae Adaptation
 
-All skills follow these principles:
-
-- **PowerShell Commands**: Primary command syntax for Windows environments
-- **Windows Paths**: Uses `%userprofile%` and absolute paths
-- **Risk Detection**: Automatic detection of Unix-specific patterns
-- **Path Conversion**: Clear rules for host/container/URL path handling
+- **PowerShell Commands**: Primary syntax for Windows environments
+- **Port Recovery**: netstat → taskkill → verify → retry
+- **Path Conventions**: Forward slashes in globs, absolute paths with backslashes
+- **Core Memory**: 20-entry limit per scope, auto-eviction for stale entries
 
 ## Contributing
 

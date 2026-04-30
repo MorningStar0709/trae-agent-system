@@ -2,7 +2,7 @@
 scene: git_message
 ---
 
-# Commit Message Rules
+# [提交信息规则名称]
 
-- Replace this line with the required commit message format.
-- Include examples only when they prevent ambiguity.
+- [约定 1]
+- [约定 2]
