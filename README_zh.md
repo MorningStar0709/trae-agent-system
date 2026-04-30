@@ -1,4 +1,4 @@
-# Trae AI Agent 操作系统
+# Trae AI Agent System
 
 [![Platform](https://img.shields.io/badge/platform-Windows-blue?style=flat-square)](https://www.trae.ai/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
@@ -9,7 +9,7 @@
 
 ## 关于本项目
 
-**Trae AI Agent OS** 是一套为 [Trae IDE](https://www.trae.ai/) 打造的 AI Agent 增强系统。通过规则路由、专业技能和持久记忆三大层，让 AI Agent 从"什么都能干但什么都不稳"变成"该快的快、该稳的稳、该学的学"。
+**Trae AI Agent System** 是一套为 [Trae IDE](https://www.trae.ai/) 打造的 AI Agent 增强系统。通过规则路由、专业技能和持久记忆三大层，让 AI Agent 从"什么都能干但什么都不稳"变成"该快的快、该稳的稳、该学的学"。
 
 ## 架构概览
 

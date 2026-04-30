@@ -20,7 +20,7 @@ If you find a bug or have a feature suggestion, please report it through GitHub 
 1. Fork this repository
 2. Clone your Fork locally
    ```powershell
-   git clone https://github.com/MorningStar0709/trae-agent-os.git
+   git clone https://github.com/MorningStar0709/trae-agent-system.git
 cd trae-agent-os
    ```
 

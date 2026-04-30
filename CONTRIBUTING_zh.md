@@ -20,7 +20,7 @@
 1. Fork 本仓库
 2. 克隆你的 Fork 到本地
    ```powershell
-   git clone https://github.com/MorningStar0709/trae-agent-os.git
+   git clone https://github.com/MorningStar0709/trae-agent-system.git
 cd trae-agent-os
    ```
 
