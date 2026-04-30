@@ -109,6 +109,10 @@ cp -r trae-agent-system/skills ~/.trae/skills
 - **路径规范**：globs 使用正斜杠，绝对路径用反斜杠
 - **核心记忆**：每范围 20 条上限，自动淘汰旧条目
 
+## 致谢
+
+本项目参考自 [superpowers-zh](https://github.com/jnMetaCode/superpowers-zh)（AI 编程超能力 · 中文增强版）的 npx 安装模式与项目结构设计思路。感谢 [@jnMetaCode](https://github.com/jnMetaCode) 的杰出工作。
+
 ## 贡献指南
 
 欢迎贡献代码！请阅读 [CONTRIBUTING_zh.md](CONTRIBUTING_zh.md) 了解贡献指南。

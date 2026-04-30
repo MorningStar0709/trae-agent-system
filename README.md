@@ -109,6 +109,10 @@ cp -r trae-agent-system/skills ~/.trae/skills
 - **Path Conventions**: Forward slashes in globs, absolute paths with backslashes
 - **Core Memory**: 20-entry limit per scope, auto-eviction for stale entries
 
+## Acknowledgments
+
+This project references [superpowers-zh](https://github.com/jnMetaCode/superpowers-zh) (AI 编程超能力 · 中文增强版) for its npx installation pattern and project structure design. Thanks to [@jnMetaCode](https://github.com/jnMetaCode) for the excellent work.
+
 ## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
