@@ -20,7 +20,7 @@
 
 4. **等待部署**
    - 部署通常需要 1-2 分钟
-   - 访问 https://MorningStar0709.github.io/trae-skills 查看效果
+   - 访问 https://MorningStar0709.github.io/trae-agent-os 查看效果
 
 ## 页面结构
 
