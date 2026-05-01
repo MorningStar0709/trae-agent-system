@@ -184,6 +184,12 @@ Closes #456
 - If secrets or credential-looking files are present, stop and ask before staging or committing them.
 - If this is the last commit on a branch, the next step should be `finishing-a-development-branch` for branch wrap-up (merge, PR, keep, or discard).
 
+## Integration
+
+- `verification-before-completion`: Upstream — validation must pass before committing.
+- `finishing-a-development-branch`: Downstream — after committing, wrap up the branch.
+- `chinese-git-workflow`: Adjacent — use when the remote is Gitee, GitLab, Coding, or CNB.
+
 ## Failure Handling
 
 - **Git not installed**: Stop and report Git is not available on this system. Suggest installing Git from https://git-scm.com or using Trae's built-in source control features. Do not attempt git commands.

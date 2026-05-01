@@ -118,9 +118,11 @@ The final output must include:
 - The context provided to the reviewer.
 - The review findings categorized by severity.
 - Recommended next steps (e.g., fix critical issues, proceed to commit).
+- If no issues found, explicitly route to `verification-before-completion` before proceeding to commit.
 
 ## Integration
 
-- `receiving-code-review`: How to validate, clarify, and apply feedback after receiving it.
-- `verification-before-completion`: Final validation after review feedback is fixed.
+- `verification-before-completion`: Upstream — review starts after verification evidence is collected.
+- `receiving-code-review`: Downstream — how to validate, clarify, and apply feedback after receiving it.
+- `verification-before-completion`: Downstream — final validation after review feedback is fixed.
 - `code-reviewer.md`: The independent review prompt template.

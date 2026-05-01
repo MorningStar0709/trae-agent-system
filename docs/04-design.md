@@ -90,7 +90,7 @@ brainstorming → writing-plans → executing-plans → verification-before-comp
 ```
 File Scope × Change Type × Risk Level × Expected Pace → S / M / L
 ```
-When dimensions conflict, the highest risk dimension prevails. Paired with Forced Escalation (7 high-risk scenarios must not be treated as S) and exception mechanisms (pure mechanical changes even across files can be treated as S).
+When dimensions conflict, the **largest T-Shirt size** prevails (not the "highest risk dimension"). When undecidable, default to the largest value for that dimension to ensure safety. Modules are defined by directory boundaries; test files count toward file count. Paired with Forced Escalation Guardrails (7 high-risk scenarios must not be treated as S) — Guardrails take precedence over Exception: score four dimensions first, then cross-check Guardrails, take the larger value. Supports dynamic reclassification during execution: upward reclassification (S→M, M→L) is mandatory when more complexity is found.
 
 **Question Thresholds**: Five MUST Ask + Five MUST NOT Ask, precisely delineating "should ask users" vs "should not ask users". Trae's default behavior is "deduce and proceed", this system fills this gap.
 

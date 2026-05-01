@@ -197,5 +197,6 @@ If the root cause is non-obvious or the debugging uncovered a subtle system beha
 ## Integration
 
 - `test-driven-development`: Establish a failing test for the bug and drive the fix.
-- `executing-plans`: For straightforward fixes where the root cause is clear and no complex implementation plan is needed.
-- `verification-before-completion`: Re-verify whether the conclusion is supported by evidence after fixing.
+- `executing-plans`: Downstream — for straightforward fixes where the root cause is clear and no complex implementation plan is needed.
+- `writing-plans`: Downstream — for complex root cause fixes that need architectural design or multi-step planning before execution.
+- `verification-before-completion`: Downstream — re-verify whether the conclusion is supported by evidence after fixing.

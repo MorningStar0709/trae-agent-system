@@ -125,8 +125,9 @@ Stop current progress and report immediately (do not guess) when:
 ### Step 4: Complete Development
 
 After all tasks are completed and validated:
+- Route to `verification-before-completion` to independently verify evidence before claiming done.
 - Summarize completion status, validation results, and any plan deviations.
-- If the user requested commits, use available commit processes (prefer `git-commit` if available, else standard git).
+- If the user requested commits, use available commit processes (prefer `git-commit` if available, else standard git) after verification passes.
 - If the user did not request commits, do not arbitrarily add wrap-up processes.
 
 ## Failure Handling

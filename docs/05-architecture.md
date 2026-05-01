@@ -60,9 +60,9 @@ User issues command, enters Rules Layer.
 **Layer 2: Rules Layer** — Responsible for routing decisions
 
 - **alwaysApply Rules** (`alwaysApply: true` in YAML frontmatter, auto-loaded every conversation):
-  - Change proposal threshold, question threshold, forced escalation guardrails, terminal execution stability
+  - Change proposal threshold, question threshold, forced escalation guardrails, terminal execution stability, skill routing and execution path
 - **Conditional Trigger Rules** (`alwaysApply: false` + `description`, auto-loaded when Agent semantically matches relevant scene):
-  - Skill routing and execution path (core), review and completion gates, environment degradation (MCP failure handling), port conflict recovery
+  - Review and completion gates, environment degradation (MCP failure handling), port conflict recovery
 - **Manual Rules** (`alwaysApply: false` + no description, loaded only when user manually references via `#Rule rule-name`): For rarely-used specialized guidance
 
 Rules stored in `.trae/rules/`, supporting project root and module-level subdirectories (max 3 levels nesting). Rules Layer makes routing decisions and dispatches to Skills Layer.
@@ -119,7 +119,7 @@ Two scopes: user (cross-project global) and project (current repo only), each ma
 | Layer                                | Components                                                                                                                                       | Responsibility                                                           |
 | :----------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------- |
 | **Infrastructure** (6 Metaskills)    | self-improvement / creating-trae-rules / skill-creator / skill-stability-review / skill-language-policy / discovering-subagent-capabilities      | Maintain the system itself — learning, rule management, Skill management |
-| **Guardrails** (8 Rules)             | 4 alwaysApply + 4 conditional trigger                                                                                                            | Routing decisions, behavior constraints, environment handling            |
+| **Guardrails** (8 Rules)             | 5 alwaysApply + 3 conditional trigger                                                                                                            | Routing decisions, behavior constraints, environment handling            |
 | **Design & Planning** (2 Skills)     | brainstorming → writing-plans                                                                                                                    | Clarify fuzzy requirements, break stable designs into executable plans   |
 | **Execution** (7 Skills)             | executing-plans / subagent-driven-development / workflow-runner / TDD / systematic-debugging / dispatching-parallel-agents / using-git-worktrees | Plan execution, debugging, test-driven development                       |
 | **Verification & Review** (3 Skills) | verification-before-completion → requesting-code-review → receiving-code-review                                                                  | Evidence-based verification, independent review, feedback processing     |
@@ -171,7 +171,7 @@ Trae also supports **module-level rules**: create `.trae/rules/` or `AGENTS.md` 
 
 ### 3.1 alwaysApply Rules (Global Guardrails)
 
-These four rule types are auto-loaded every conversation, ensuring Agent follows basic behavior standards in any scenario:
+These five rule types are auto-loaded every conversation, ensuring Agent follows basic behavior standards and routing decisions in any scenario:
 
 | Rule File                           | Responsibility                 | One-Line Summary                                         |
 | :---------------------------------- | :----------------------------- | :------------------------------------------------------- |
@@ -179,6 +179,7 @@ These four rule types are auto-loaded every conversation, ensuring Agent follows
 | **question-threshold.md**           | Question boundary control      | Defines when must ask users, when must not               |
 | **forced-escalation-guardrails.md** | S-level task forced escalation | 7 high-risk scenarios must not be treated as small tasks |
 | **terminal-execution-stability.md** | Terminal operation discipline  | Terminal is an evidence tool, not a guessing tool        |
+| **skill-routing-and-execution-path.md** | Core routing             | T-Shirt sizing + route to correct skill, always loaded to ensure classification completeness |
 
 #### 3.1.1 change-proposal-threshold: Change Proposal Threshold
 
@@ -246,16 +247,17 @@ Core disciplines:
 
 | Rule File                               | Trigger Scenario              | Responsibility                                                  |
 | :-------------------------------------- | :---------------------------- | :-------------------------------------------------------------- |
-| **skill-routing-and-execution-path.md** | Non-trivial development tasks | **Core routing**: T-Shirt sizing + skill mapping table          |
 | **review-and-completion-gates.md**      | Task approaching completion   | Completion gate execution sequence orchestration                |
 | **environment-resilience.md**           | MCP tool connection failure   | Graceful degradation chain (retry → terminal fallback → report) |
 | **port-conflict-recovery.md**           | Port conflict/zombie process  | Windows port recovery process                                   |
 
-#### 3.2.1 skill-routing-and-execution-path: Core Routing
+#### 3.2.1 skill-routing-and-execution-path: Core Routing (alwaysApply)
+
+> This rule has been upgraded from conditional trigger to `alwaysApply: true`, ensuring T-Shirt classification is performed before any code change to prevent incorrect routing due to missed classification.
 
 This is the **traffic hub** of the entire system. It classifies tasks via T-Shirt Sizing, then routes to the correct skill based on task type:
 
-**T-Shirt Sizing Matrix:**
+**T-Shirt 4-Dimension Matrix:**
 
 | Dimension     | S (Small)                     | M (Medium)                    | L/XL (Large)                             |
 | :------------ | :---------------------------- | :---------------------------- | :--------------------------------------- |
@@ -264,7 +266,16 @@ This is the **traffic hub** of the entire system. It classifies tasks via T-Shir
 | Risk Level    | No forced escalation triggers | Has triggers but change clear | Has triggers + architectural uncertainty |
 | Expected Pace | Single focused pass           | Requires multiple iterations  | Design → split → implement               |
 
-**Exception Mechanism**: Even with 4+ files or cross-module, if purely mechanical operations (copy tweaks, trivial renames, type fixes, global path updates), still treat as S.
+**Judgment Rules (core fixes from this round):**
+- **When dimensions conflict**: Take the largest T-Shirt size across ALL four dimensions (not the "highest risk"). E.g., File=S, Change=M, Risk=M, Pace=S → final=M.
+- **When undecidable**: If any dimension cannot be assessed with reasonable confidence, default to the largest possible size for that dimension to ensure safety.
+- **Module definition**: A "module" is a functional unit with its own directory boundary (e.g., `src/auth/`, `src/api/`). Test files in a co-located `__tests__/` or `test/` directory within the same module do not count as a separate module.
+- **Test files counting**: Test files count toward the file count. E.g., 2 impl files + 2 test files = 4 files → File scope is M.
+- **Guardrails priority**: Forced Escalation Guardrails take precedence over Exception to Escalation. Assessment order: score four dimensions first → cross-check Guardrails → final classification is the larger value.
+
+**Exception Mechanism**: Even with 4+ files or cross-module, if purely mechanical operations (copy tweaks, trivial renames, type fixes, global path updates), still treat as S. However, if any Guardrails scenario is triggered, minimum classification is M.
+
+**Reclassification during execution**: Classification can be re-evaluated mid-execution. Upward reclassification (S→M, M→L) is **mandatory** — switch immediately when more complexity is found. Downward reclassification is **optional** — stability preferred over optimization.
 
 **Skill Routing Table (Core Mapping):**
 
@@ -287,16 +298,17 @@ Fixed execution sequence (M/L tasks):
 ```
 1. verification-before-completion      ← Self-verification
 2. requesting-code-review              ← Request independent review
-3. receiving-code-review               ← Handle feedback (if any)
+3. receiving-code-review               ← Handle review feedback (if any)
 4. verification-before-completion      ← Re-verify after fixes (if any)
-5. finishing-a-development-branch      ← Branch completion
+5. git-commit                          ← Commit fixes (if any)
+6. finishing-a-development-branch      ← Branch completion
 ```
 
-S tasks jump directly to 2-4, taking fast lane.
+S tasks skip steps 2-5 (directly from step 1 to step 6), taking fast lane. On the S path, commit directly after verification passes and append wrap-up guidance.
 
 Two built-in gates:
 
-- **Knowledge Promotion Gate**: During completion, auto-check for storable lessons, invoke self-improvement to write to Core Memory
+- **Knowledge Promotion Gate**: During completion, auto-check for storable lessons. "Persistent" means ≥2 occurrences during this branch, or a single non-trivial discovery (e.g., an undocumented environment quirk). If triggered, invoke self-improvement to write to Core Memory.
 - **Proactive Review Gate**: During M/L task completion, quickly scan system state, discover optimizable rule/skill coverage gaps
 
 #### 3.2.3 Environment Degradation & Port Recovery
@@ -788,7 +800,7 @@ This system makes the following specialized designs for Chinese development team
 | question-threshold.md               | ✅           | \~28  | Question boundaries |
 | forced-escalation-guardrails.md     | ✅           | \~18  | Risk escalation     |
 | terminal-execution-stability.md     | ✅           | \~13  | Terminal discipline |
-| skill-routing-and-execution-path.md | ❌           | \~44  | Core routing        |
+| skill-routing-and-execution-path.md | ✅           | \~44+ | Core routing        |
 | review-and-completion-gates.md      | ❌           | \~32  | Completion gates    |
 | environment-resilience.md           | ❌           | \~20  | MCP degradation     |
 | port-conflict-recovery.md           | ❌           | \~44  | Port recovery       |

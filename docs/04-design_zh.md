@@ -90,7 +90,7 @@ brainstorming → writing-plans → executing-plans → verification-before-comp
 ```
 文件范围 × 变更性质 × 风险等级 × 预期节奏 → S / M / L
 ```
-评分不一致时以最高风险维度为准。配以 Forced Escalation（7 类高风险场景严禁按 S 处理）和例外机制（纯机械变更即使跨文件也可按 S）。
+评分不一致时以**最大的 T-Shirt 尺寸**为准（而非"最高风险维度"），无法判定时默认取该维度最大值以确保安全。Module 以独立目录边界定义，测试文件计入文件数。配以 Forced Escalation（7 类高风险场景严禁按 S 处理）——Guardrails 优先于 Exception，先评四维再交叉检查 Guardrails，取较大值。执行过程中支持动态重分类，发现更复杂时强制向上切换。
 
 **提问阈值**：五条 MUST Ask + 五条 MUST NOT Ask，精确划出"该问用户"和"不该问用户"的边界。Trae 默认行为是"deduce and proceed"，本系统填补了这一空白。
 

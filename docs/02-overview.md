@@ -71,7 +71,7 @@ Many "Agent enhancement packs" are just prompt collections. Our system has deepe
 
 ## Brief Overview
 
-**Rules Layer** — 8 "traffic rules" telling the Agent what it can/can't do and when to ask users. 4 are always-on, 4 are scenario-triggered.
+**Rules Layer** — 8 "traffic rules" telling the Agent what it can/can't do and when to ask users. 5 are always-on, 3 are scenario-triggered.
 
 **Skills Layer** — 33 "professional toolboxes" covering requirement clarification, design planning, code implementation, debugging, code review, commit management, branch completion, knowledge accumulation, browser debugging, accessibility auditing, data visualization, frontend design...
 

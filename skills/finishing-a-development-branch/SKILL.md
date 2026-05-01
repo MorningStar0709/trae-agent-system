@@ -52,9 +52,9 @@ Confirm at least:
 - Build or lint (if relevant) has passed.
 - Current branch state is clear.
 
-### 1.5. Knowledge Promotion Gate
+### 1.5. Knowledge Promotion Gate <!-- anchor: knowledge-promotion-gate -->
 
-During wrap-up, check if any persistent workarounds, rule discoveries, or recurring errors occurred during this branch. Examples:
+During wrap-up of medium or larger tasks, check if any persistent workarounds, rule discoveries, or recurring errors occurred during this branch. Examples:
 
 - A non-obvious environment workaround was discovered during implementation.
 - A project convention was clarified through user correction.
@@ -185,7 +185,7 @@ If wrap-up is not truly completed due to validation failure, remote failure, or 
 
 ## Integration
 
-- `using-git-worktrees`: If the current work is in an isolated workspace.
-- `verification-before-completion`: Validate before stating "ready to merge / ready to commit".
-- `git-commit`: Downstream — if the branch has uncommitted work that needs final commits before wrap-up.
-- `chinese-git-workflow`: Use when the remote is Gitee, GitLab, Coding, CNB, or requires platform-specific PR/MR configuration.
+- `using-git-worktrees`: Adjacent — if the current work is in an isolated workspace.
+- `verification-before-completion`: Upstream — validate before stating "ready to merge / ready to commit".
+- `git-commit`: Upstream — if the branch has uncommitted work that needs final commits before wrap-up.
+- `chinese-git-workflow`: Adjacent — use when the remote is Gitee, GitLab, Coding, CNB, or requires platform-specific PR/MR configuration.

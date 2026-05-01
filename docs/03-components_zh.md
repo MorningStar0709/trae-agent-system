@@ -52,7 +52,7 @@
 | 层 | 包含组件 | 职责 |
 |:---|:---------|:-----|
 | **基础设施层**（6 个 Metaskill） | self-improvement / creating-trae-rules / skill-creator / skill-stability-review / skill-language-policy / discovering-subagent-capabilities | 维护系统本身——学习沉淀、规则管理、Skill 管理 |
-| **护栏层**（8 条 Rule） | 4 条 alwaysApply + 4 条条件触发 | 路由决策、行为约束（T-Shirt 分档、提问阈值、强制升级）、环境处理（终端纪律、MCP 降级、端口恢复） |
+| **护栏层**（8 条 Rule） | 5 条 alwaysApply + 3 条条件触发 | 路由决策、行为约束、T-Shirt 分档、强制升级、环境处理 |
 | **设计/规划层**（2 个 Skill） | brainstorming → writing-plans | 需求模糊时先设计，设计稳定后拆计划 |
 | **执行层**（7 个 Skill） | executing-plans / subagent-driven-development / workflow-runner / test-driven-development / systematic-debugging / dispatching-parallel-agents / using-git-worktrees | 按计划执行、调试定位、测试驱动、并行只读分析 |
 | **验证/审查层**（3 个 Skill） | verification-before-completion → requesting-code-review → receiving-code-review | 证据化验证、独立审查、反馈落地 |
@@ -62,8 +62,8 @@
 
 | 级别 | 路由路径 | 适用场景 |
 |:-----|:---------|:---------|
-| **S（小任务）** | 实现 → `verification` → `finishing-branch` | ≤3 文件、机械变更、无风险触发 |
-| **M（中任务）** | `writing-plans` → `executing-plans`/`subagent-driven` → 验证 → 审查 → 再验证 → 提交 → 收尾 | 4-10 文件、非平凡但设计明确 |
+| **S（小任务）** | 实现 → `verification` → (`git-commit` + `finishing-branch`) | ≤3 文件、机械变更、无风险触发；实现中发现 bug 则切换到 systematic-debugging |
+| **M（中任务）** | `writing-plans` → `executing-plans`/`subagent-driven` → 验证 → 审查 → 再验证 → 提交 → 收尾（间含 Knowledge Promotion Gate） | 4-10 文件、非平凡但设计明确；任务耦合度高用 executing-plans，独立任务用 subagent-driven |
 | **L（大任务）** | `brainstorming` → [进入 M 路径] | 跨模块、需求模糊、架构变更 |
 
 ### 3. 工具层 / 专项 Skill（13 个独立可插拔）
@@ -92,13 +92,13 @@
 | **question-threshold** | 精确定义"必须问"和"绝不能问"的场景 | 用户只在真正需要决策时被介入 |
 | **forced-escalation-guardrails** | 7 类高风险任务严禁按小任务处理 | 保护核心配置、安全、CI/CD 不被草率对待 |
 | **terminal-execution-stability** | 用稳定证据替代终端猜测 | 杜绝"看起来成功"的假通过 |
+| **skill-routing-and-execution-path** | T-Shirt 分档 + 路由到正确技能 | 始终加载确保分类规则不缺失，任何代码变更前先执行分档 |
 
 ### 2.2 条件触发规则（智能匹配场景时加载）
 
 | 规则 | 触发条件 | 做什么 |
 |:-----|:---------|:-------|
-| **skill-routing-and-execution-path** | 非平凡开发任务 | T-Shirt 分档 + 路由到正确技能，是整个系统的交通枢纽 |
-| **review-and-completion-gates** | 任务临近完成 | 编排收尾五步执行顺序（验证→审查→修复→再验证→收尾） |
+| **review-and-completion-gates** | 任务临近完成 | 编排收尾六步执行顺序（验证→审查→修复→再验证→提交→收尾） |
 | **environment-resilience** | MCP 工具连接失败 | 三级降级链：重试 → PowerShell 替代 → 报告局限 |
 | **port-conflict-recovery** | 端口冲突/僵尸进程 | netstat 查 PID → taskkill → 确认释放 → 重试 |
 
@@ -179,14 +179,16 @@
 
 ```
 S（小任务）→ 直接走，不经过design/plan skill
-  ├─ ≤3 个文件
+  ├─ ≤3 个文件（测试文件计入计数）
   ├─ 机械变更（复制、重命名、类型修复）
-  └─ 无强制升级触发项
+  ├─ 无强制升级触发项
+  └─ 四维不一致时取最大尺寸；无法判定时默认取大值
 
 M（中任务）→ writing-plans → executing-plans
   ├─ 4-10 个文件
   ├─ 非平凡但设计明确
-  └─ 可选 TDD
+  ├─ 可选 TDD
+  └─ Guardrails 优先于 Exception，触碰护栏最低 M
 
 L/XL（大任务）→ brainstorming 必须先
   ├─ 跨模块/多系统

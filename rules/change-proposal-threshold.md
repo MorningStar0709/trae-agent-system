@@ -22,6 +22,8 @@ Use this lightweight framework to decide:
 - If the net benefit is marginal or ambiguous: mention it briefly as an observation, not a recommendation. Let the user decide if they want to pursue it.
 - If the net benefit is negative (cost > benefit, risk too high, simpler alternative available): do not propose. The agent should internalize the decision and move on.
 
-**Applicability:** This threshold applies when the agent initiates a proposal to change rules, skills, or configuration. It does not apply when the user explicitly asks "what should I change?" — in that case, present all findings with honest assessments.
+**Output completeness**: When presenting findings that imply changes (fixes, optimizations, refactors), bundle stability/risk/benefit assessment in the same output rather than waiting for follow-up questions. The minimum required: "does this affect stability? any risk of regression? is it worth the cost?" answered in 2-3 sentences.
+
+**Applicability:** This threshold applies when the agent initiates a proposal to change rules, skills, or configuration. It does not apply when the user explicitly asks "what should I change?", "有什么可以优化的", "你看看还有什么问题", or any other clear invitation for the agent to propose improvements — in that case, present all findings with honest assessments.
 
 **See also:** `question-threshold.md` for when to ask the user vs deduce, and `review-and-completion-gates.md` for the Proactive Review Gate that triggers this threshold during branch wrap-up.

@@ -15,4 +15,6 @@ Never categorize a task as Small (S) if it involves any of the following:
 - Changes to CI/CD pipelines, deployment scripts, Dockerfiles, or infrastructure-as-code files.
 - Changes involving destructive operations (data migration, batch deletion, file system manipulation, database schema changes).
 
+**"At least M" note**: "At least M" means M is the floor, not the ceiling. If a task triggers Guardrails and also has ambiguous requirements or architecture changes (L characteristics per T-Shirt Sizing), the overall classification is L, not M.
+
 See also: `skill-routing-and-execution-path.md` for T-Shirt Sizing and routing decision rules. For when to ask vs deduce, see `question-threshold.md`.

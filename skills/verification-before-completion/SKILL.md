@@ -109,10 +109,11 @@ Therefore, I can only confirm the auth module changes passed this test scope; th
 
 ## Integration
 
-- `test-driven-development`: Handles the red-green loop; this skill handles the evidence check before the final claim.
-- `systematic-debugging`: Handles finding the root cause; this skill confirms the result after fixing.
-- `git-commit`: Finish the validations here before committing; do not reverse the order.
-- `finishing-a-development-branch`: Downstream — after verification passes, use finishing-a-development-branch for wrap-up (merge, PR, keep, or discard).
+- `test-driven-development`: Upstream — handles the red-green loop; this skill handles the evidence check before the final claim.
+- `systematic-debugging`: Upstream — handles finding the root cause; this skill confirms the result after fixing.
+- `receiving-code-review`: Upstream — re-verify after review fixes are applied.
+- `git-commit`: Downstream — finish the validations here before committing; do not reverse the order.
+- `finishing-a-development-branch`: Downstream — after verification passes, route to finishing-a-development-branch for wrap-up (merge, PR, keep, or discard). For S (Small) Fast-Path per review-and-completion-gates.md, append wrap-up guidance directly instead of routing to this skill.
 - `requesting-code-review`: Downstream — after verification, opt into code review before merging.
 
 ## Bottom Line

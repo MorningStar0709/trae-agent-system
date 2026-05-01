@@ -52,7 +52,7 @@ Command failure / user correction / best practice discovery / knowledge gap → 
 | Layer | Components | Responsibility |
 |:------|:-----------|:---------------|
 | **Infrastructure** (6 Metaskills) | self-improvement / creating-trae-rules / skill-creator / skill-stability-review / skill-language-policy / discovering-subagent-capabilities | Maintain the system itself — learning, rule management, Skill management |
-| **Guardrails** (8 Rules) | 4 alwaysApply + 4 conditional trigger | Routing decisions, behavior constraints (T-Shirt sizing, question thresholds, forced escalation), environment handling (terminal discipline, MCP degradation, port recovery) |
+| **Guardrails** (8 Rules) | 5 alwaysApply + 3 conditional trigger | Routing decisions, behavior constraints, T-Shirt sizing, forced escalation, environment handling |
 | **Design & Planning** (2 Skills) | brainstorming → writing-plans | Clarify fuzzy requirements, break stable designs into executable plans |
 | **Execution** (7 Skills) | executing-plans / subagent-driven-development / workflow-runner / test-driven-development / systematic-debugging / dispatching-parallel-agents / using-git-worktrees | Plan execution, debugging, test-driven development, parallel read-only analysis |
 | **Verification & Review** (3 Skills) | verification-before-completion → requesting-code-review → receiving-code-review | Evidence-based verification, independent review, feedback processing |
@@ -62,8 +62,8 @@ Command failure / user correction / best practice discovery / knowledge gap → 
 
 | Tier | Routing Path | Applicable Scenarios |
 |:-----|:-------------|:---------------------|
-| **S (Small)** | Implement → `verification` → `finishing-branch` | ≤3 files, mechanical changes, no risk triggers |
-| **M (Medium)** | `writing-plans` → `executing-plans`/`subagent-driven` → verify → review → re-verify → commit → finish | 4-10 files, non-trivial but design clear |
+| **S (Small)** | Implement → `verification` → (`git-commit` + `finishing-branch`) | ≤3 files, mechanical changes, no risk triggers; switch to systematic-debugging if a debuggable bug is found during implementation |
+| **M (Medium)** | `writing-plans` → `executing-plans`/`subagent-driven` → verify → review → re-verify → commit → finish (with Knowledge Promotion Gate) | 4-10 files, non-trivial but design clear; use executing-plans for coupled tasks, subagent-driven for independent tasks |
 | **L (Large)** | `brainstorming` → [enter M path] | Cross-module, fuzzy requirements, architecture changes |
 
 ### 3. Tools Layer / Specialized Skills (13 pluggable)
@@ -92,13 +92,13 @@ Rules are stored in `.trae/rules/`, controlled by YAML frontmatter.
 | **question-threshold** | Precisely define "must ask" and "must not ask" scenarios | Users are only interrupted when decisions are truly needed |
 | **forced-escalation-guardrails** | 7 high-risk task categories must not be treated as small tasks | Protects core configs, security, CI/CD from careless handling |
 | **terminal-execution-stability** | Use stable evidence instead of terminal guessing | Eliminates "looks successful" false passes |
+| **skill-routing-and-execution-path** | T-Shirt sizing + route to correct skill | Always loaded to ensure classification is never missed before any code change |
 
 ### 2.2 Conditional Trigger Rules (Loaded on Smart Match)
 
 | Rule | Trigger Condition | What It Does |
 |:-----|:------------------|:-------------|
-| **skill-routing-and-execution-path** | Non-trivial development tasks | T-Shirt sizing + route to correct skill, system's traffic hub |
-| **review-and-completion-gates** | Task approaching completion | Orchestrate 5-step completion sequence |
+| **review-and-completion-gates** | Task approaching completion | Orchestrate 6-step completion sequence (verify→review→fix→re-verify→commit→finish) |
 | **environment-resilience** | MCP tool connection failure | Three-tier degradation: retry → PowerShell fallback → report limitation |
 | **port-conflict-recovery** | Port conflict/zombie process | netstat PID → taskkill → verify release → retry |
 
@@ -179,14 +179,16 @@ Skills are stored in `skills/<skill-name>/SKILL.md`, triggered by Agent automati
 
 ```
 S (Small) → Go direct, skip design/plan skills
-  ├─ ≤3 files
+  ├─ ≤3 files (test files count toward limit)
   ├─ Mechanical changes (copy, rename, type fix)
-  └─ No forced escalation triggers
+  ├─ No forced escalation triggers
+  └─ When dimensions conflict, take largest size; when undecidable, default up
 
 M (Medium) → writing-plans → executing-plans
   ├─ 4-10 files
   ├─ Non-trivial but design is clear
-  └─ Optional TDD
+  ├─ Optional TDD
+  └─ Guardrails take precedence over Exception; hitting Guardrails = minimum M
 
 L/XL (Large) → brainstorming required first
   ├─ Cross-module/multi-system
