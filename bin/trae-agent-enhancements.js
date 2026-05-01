@@ -70,12 +70,12 @@ function generateBootstrapRule(targetDir, rulesLabel, skillsLabel) {
 
   const content = `---
 alwaysApply: true
-description: Trae AI Agent System bootstrap — enables rule routing, skill discovery, and agent enhancement.
+description: Trae AI Agent Enhancements bootstrap — enables rule routing, skill discovery, and agent enhancement.
 ---
 
-# Trae AI Agent System
+# Trae AI Agent Enhancements
 
-你已经加载了 Trae AI Agent System。本系统通过规则路由、专业技能和持久记忆三大层，让 AI Agent 更稳定、更专业。
+你已经加载了 Trae AI Agent Enhancements。本系统通过规则路由、专业技能和持久记忆三大层，让 AI Agent 更稳定、更专业。
 
 ## 核心规则
 
@@ -101,7 +101,7 @@ ${skillBullets}
 当任务匹配某个技能时，读取对应的 \`${skillsLabel}<skill-name>/SKILL.md\` 并严格遵循其流程。
 `;
 
-  const rulePath = resolve(rulesDir, '00-trae-agent-system.md');
+  const rulePath = resolve(rulesDir, '00-trae-agent-enhancements.md');
   writeFileSync(rulePath, content, 'utf8');
   return rulePath;
 }
@@ -111,8 +111,8 @@ function verifySkillsCopied(srcCount, dest) {
     throw new Error(
       `复制 skills 失败：源目录有 ${srcCount} 个技能，但目标 ${dest} 为空。` +
       `\n  这通常是 npx 缓存目录权限或路径问题。请尝试：\n` +
-      `    1. 清理缓存后重试: npm cache clean --force && npx trae-agent-system\n` +
-      `    2. 或全局安装: npm i -g trae-agent-system && trae-agent-system\n` +
+      `    1. 清理缓存后重试: npm cache clean --force && npx trae-agent-enhancements\n` +
+      `    2. 或全局安装: npm i -g trae-agent-enhancements && trae-agent-enhancements\n` +
       `    3. 或手动克隆复制: git clone https://github.com/MorningStar0709/trae-agent-enhancements.git`
     );
   }
@@ -137,14 +137,14 @@ function getEditionLabel(edition) {
 
 function showHelp() {
   console.log(`
-  trae-agent-system v${PKG.version} — Trae AI Agent System
+  trae-agent-enhancements v${PKG.version} — Trae AI Agent Enhancements
 
   用法：
-    npx trae-agent-system                     交互式选择版本并安装
-    npx trae-agent-system --edition cn        国内版（默认），安装到 ~/.trae-cn/
-    npx trae-agent-system --edition intl      国际版，安装到 ~/.trae/
-    npx trae-agent-system --help              显示帮助
-    npx trae-agent-system --version           显示版本
+    npx trae-agent-enhancements                     交互式选择版本并安装
+    npx trae-agent-enhancements --edition cn        国内版（默认），安装到 ~/.trae-cn/
+    npx trae-agent-enhancements --edition intl      国际版，安装到 ~/.trae/
+    npx trae-agent-enhancements --help              显示帮助
+    npx trae-agent-enhancements --version           显示版本
 
   说明：
     安装到用户主目录：
@@ -230,13 +230,13 @@ async function main() {
     process.exit(0);
   }
 
-  console.log(`\n  ╔══════════════════════════════════════════╗`);
-  console.log(`  ║   trae-agent-system v${PKG.version.padEnd(24)}║`);
-  console.log(`  ║   Trae AI Agent System                  ║`);
-  console.log(`  ╚══════════════════════════════════════════╝\n`);
+  console.log(`\n  ╔══════════════════════════════════════════════╗`);
+  console.log(`  ║   trae-agent-enhancements v${PKG.version.padEnd(22)}║`);
+  console.log(`  ║   Trae AI Agent Enhancements              ║`);
+  console.log(`  ╚══════════════════════════════════════════════╝\n`);
 
   if (!existsSync(SKILLS_SRC)) {
-    console.error('  ❌ 错误：skills 源目录不存在，请重新安装 trae-agent-system。');
+    console.error('  ❌ 错误：skills 源目录不存在，请重新安装 trae-agent-enhancements。');
     process.exit(1);
   }
 

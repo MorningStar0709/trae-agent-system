@@ -2,7 +2,7 @@
 
 [![Platform](https://img.shields.io/badge/platform-Windows-blue?style=flat-square)](https://www.trae.ai/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
-[![npm](https://img.shields.io/npm/v/trae-agent-system?style=flat-square)](https://www.npmjs.com/package/trae-agent-system)
+[![npm](https://img.shields.io/npm/v/trae-agent-enhancements?style=flat-square)](https://www.npmjs.com/package/trae-agent-enhancements)
 
 [English](./README.md) | [中文](./README_zh.md)
 
@@ -39,7 +39,7 @@
 在任何目录下运行即可（全局安装到用户主目录，所有项目可用）：
 
 ```
-npx trae-agent-system
+npx trae-agent-enhancements
 ```
 
 根据提示选择你的 Trae 版本即可完成安装：
@@ -52,9 +52,9 @@ npx trae-agent-system
 你也可以通过 `--edition` 参数直接指定版本：
 
 ```
-npx trae-agent-system --edition cn       # 国内版
-npx trae-agent-system --edition intl     # 国际版
-npx trae-agent-system --help             # 查看帮助
+npx trae-agent-enhancements --edition cn       # 国内版
+npx trae-agent-enhancements --edition intl     # 国际版
+npx trae-agent-enhancements --help             # 查看帮助
 ```
 
 ### 前置依赖（MCP）

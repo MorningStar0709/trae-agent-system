@@ -2,7 +2,7 @@
 
 [![Platform](https://img.shields.io/badge/platform-Windows-blue?style=flat-square)](https://www.trae.ai/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
-[![npm](https://img.shields.io/npm/v/trae-agent-system?style=flat-square)](https://www.npmjs.com/package/trae-agent-system)
+[![npm](https://img.shields.io/npm/v/trae-agent-enhancements?style=flat-square)](https://www.npmjs.com/package/trae-agent-enhancements)
 
 [English](./README.md) | [中文](./README_zh.md)
 
@@ -39,7 +39,7 @@ User Input → Rules (Routing & Constraints) → Skills (Execution) → Memory (
 Run this anywhere (installs to your home directory, global for all projects):
 
 ```
-npx trae-agent-system
+npx trae-agent-enhancements
 ```
 
 Follow the interactive prompt to select your Trae edition:
@@ -52,9 +52,9 @@ Follow the interactive prompt to select your Trae edition:
 You can also specify the edition directly with `--edition`:
 
 ```
-npx trae-agent-system --edition cn       # China edition
-npx trae-agent-system --edition intl     # International edition
-npx trae-agent-system --help             # View help
+npx trae-agent-enhancements --edition cn       # China edition
+npx trae-agent-enhancements --edition intl     # International edition
+npx trae-agent-enhancements --help             # View help
 ```
 
 ### Prerequisites (MCP)

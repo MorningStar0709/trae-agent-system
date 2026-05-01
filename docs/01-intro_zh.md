@@ -1,6 +1,6 @@
 # Trae AI Agent System
 
-本项目是一套为 Trae IDE 打造的 **AI Agent 规则与技能集**。通过 `npx trae-agent-system` 一键安装到全局，Agent 立即获得规则约束、专业技能和持续记忆能力。
+本项目是一套为 Trae IDE 打造的 **AI Agent 规则与技能集**。通过 `npx trae-agent-enhancements` 一键安装到全局，Agent 立即获得规则约束、专业技能和持续记忆能力。
 
 ## 有什么
 
