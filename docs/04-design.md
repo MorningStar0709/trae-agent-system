@@ -68,7 +68,7 @@ brainstorming → writing-plans → executing-plans → verification-before-comp
 | IDE toolset | Terminal discipline standards + MCP degradation | Standardized |
 | Rule Frontmatter | 4 activation modes fully covered + quality standards | Compliant |
 
-**Design Value**: Installing this system won't break any Trae native behavior. Native memory works normally, native rules load normally — this system is the "second operating system" on top of native capabilities.
+**Design Value**: Installing this system won't break any Trae native behavior. Native memory works normally, native rules load normally — this system is the second enhancement layer on top of native capabilities.
 
 ### 2.3 Follow Official Specs, Don't Invent Formats
 

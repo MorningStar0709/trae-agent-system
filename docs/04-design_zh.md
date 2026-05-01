@@ -68,7 +68,7 @@ brainstorming → writing-plans → executing-plans → verification-before-comp
 | IDE 工具集 | 终端纪律规范 + MCP 降级 | 规范 |
 | Rule Frontmatter | 4 激活模式全覆盖 + 质量标准 | 遵循 |
 
-**设计价值**：用户安装本系统不会破坏任何 Trae 原生行为。原生记忆照常工作，原生规则照常加载——本系统是原生之上的"第二层操作系统"。
+**设计价值**：用户安装本系统不会破坏任何 Trae 原生行为。原生记忆照常工作，原生规则照常加载——本系统是原生之上的第二层增强层。
 
 ### 2.3 遵循官方规范，不发明格式
 

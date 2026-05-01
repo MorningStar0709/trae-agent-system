@@ -16,7 +16,7 @@
 
 ### 1.1 What This Project Is
 
-This project is essentially a **"Cognitive Operating System for AI Agents"** — providing Trae IDE's AI Agent with:
+This project is essentially a **Cognitive Enhancement Framework for AI Agents** — providing Trae IDE's AI Agent with:
 
 - **Routing Decision Capability**: Knows which skill to use for which task
 - **Behavior Constraint System**: Knows what can/cannot be done, when to ask users

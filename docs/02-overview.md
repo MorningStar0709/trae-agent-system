@@ -1,6 +1,6 @@
 # Trae AI Agent System: Make Your Agent Smarter and More Reliable
 
-> An AI Agent enhancement system for Trae IDE.
+> A Trae AI Agent rules and skills collection.
 >
 > Quick intro: [01-intro.md](./01-intro.md) | Complete overview: [05-architecture.md](./05-architecture.md) | Quick reference: [03-components.md](./03-components.md)
 

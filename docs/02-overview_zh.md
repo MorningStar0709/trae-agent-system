@@ -1,6 +1,6 @@
 # Trae AI Agent System：让你的 Agent 更聪明、更靠谱
 
-> 一个为 Trae IDE 打造的 AI Agent 增强系统。
+> 一套为 Trae IDE 打造的 AI Agent 规则与技能集。
 >
 > 极简介绍：[01-intro_zh.md](./01-intro_zh.md) ｜ 完整介绍：[05-architecture_zh.md](./05-architecture_zh.md) ｜ 组件速查：[03-components_zh.md](./03-components_zh.md)
 
