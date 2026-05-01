@@ -115,6 +115,7 @@ Therefore, I can only confirm the auth module changes passed this test scope; th
 - `git-commit`: Downstream — finish the validations here before committing; do not reverse the order.
 - `finishing-a-development-branch`: Downstream — after verification passes, route to finishing-a-development-branch for wrap-up (merge, PR, keep, or discard). For S (Small) Fast-Path per review-and-completion-gates.md, append wrap-up guidance directly instead of routing to this skill.
 - `requesting-code-review`: Downstream — after verification, opt into code review before merging.
+- `usage-log`（可选）: 当验证结果明显优于"无系统"时的典型表现（如发现了手动验证不会发现的 bug），在 `docs/usage-log/USAGE-LOG.md` 中追加一条记录以供将来参考。
 
 ## Bottom Line
 

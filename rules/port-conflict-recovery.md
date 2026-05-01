@@ -41,4 +41,4 @@ Do not start multiple instances on the same port. Kill the previous instance fir
 
 ## Post-Recovery Logging
 
-After successfully recovering from a port conflict, if the resolution required investigation, invoke `self-improvement` to log the experience. If the same failure recurs 3+ times, promote the pattern to a permanent Rule.
+After successfully recovering from a port conflict, if the resolution required investigation, invoke `self-improvement` to log the experience. If the same failure recurs 2+ times, promote the pattern to a permanent Rule.

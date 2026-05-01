@@ -30,6 +30,8 @@ description: Always-active task classification and process routing. Apply T-Shir
 
 - **Skill Routing Table**:
 
+  > **说明**：下表是常见任务到技能的路由参考，帮助 Agent 快速匹配。它不是完整清单——完整技能清单以 `skills/*/SKILL.md` 为准。新增技能时不需要更新此表。
+
   | If the task is... | Route to | Instead of |
   |:------------------|:---------|:-----------|
   | Exploratory, ambiguous, architecture/design | `brainstorming` | implementing directly |

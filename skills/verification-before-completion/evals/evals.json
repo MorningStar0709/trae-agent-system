@@ -1,0 +1,23 @@
+{
+  "skill_name": "verification-before-completion",
+  "evals": [
+    {
+      "id": "golden-verify-before-claim",
+      "prompt": "确认真的修好了",
+      "expected_output": "Run validation first (re-run tests, reproduction path, or build), then report results based on real evidence; do not claim success without fresh validation",
+      "files": []
+    },
+    {
+      "id": "boundary-cant-run-validation",
+      "prompt": "验证一下这个修改，但我没有测试环境",
+      "expected_output": "Explicitly state the blocker, missing dependencies, and currently unverified scope; do not pretend validation passed",
+      "files": []
+    },
+    {
+      "id": "negative-still-debugging",
+      "prompt": "这个 bug 还在排查中，先别急",
+      "expected_output": "Do not trigger verification-before-completion; continue debugging or troubleshooting",
+      "files": []
+    }
+  ]
+}

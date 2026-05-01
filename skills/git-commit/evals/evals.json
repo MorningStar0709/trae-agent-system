@@ -1,0 +1,23 @@
+{
+  "skill_name": "git-commit",
+  "evals": [
+    {
+      "id": "golden-typical-commit",
+      "prompt": "帮我提交一下",
+      "expected_output": "Analyze diff → determine type/scope → generate conventional commit message → execute git commit",
+      "files": []
+    },
+    {
+      "id": "boundary-no-changes",
+      "prompt": "帮我提交一下，没有改动",
+      "expected_output": "Report that the working tree has no staged or unstaged changes; do not create an empty commit",
+      "files": []
+    },
+    {
+      "id": "negative-just-review",
+      "prompt": "帮我 review 一下代码",
+      "expected_output": "Do not trigger git-commit; should route to requesting-code-review or provide code review directly",
+      "files": []
+    }
+  ]
+}
