@@ -1,8 +1,8 @@
 # Trae AI Agent System：让你的 Agent 更聪明、更靠谱
 
-> 一个为 Trae IDE 打造的 AI Agent 增强系统。不用装插件、不用写脚本，丢进项目就能用。
+> 一个为 Trae IDE 打造的 AI Agent 增强系统。
 >
-> 极简介绍：[01-intro\_zh.md](./01-intro_zh.md) ｜ 完整介绍：[05-architecture\_zh.md](./05-architecture_zh.md) ｜ 组件速查：[03-components\_zh.md](./03-components_zh.md)
+> 极简介绍：[01-intro_zh.md](./01-intro_zh.md) ｜ 完整介绍：[05-architecture_zh.md](./05-architecture_zh.md) ｜ 组件速查：[03-components_zh.md](./03-components_zh.md)
 
 ***
 

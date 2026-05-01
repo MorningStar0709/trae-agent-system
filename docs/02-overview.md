@@ -1,6 +1,6 @@
 # Trae AI Agent System: Make Your Agent Smarter and More Reliable
 
-> An AI Agent enhancement system for Trae IDE. No plugins, no scripts — just drop it into your project and it works.
+> An AI Agent enhancement system for Trae IDE.
 >
 > Quick intro: [01-intro.md](./01-intro.md) | Complete overview: [05-architecture.md](./05-architecture.md) | Quick reference: [03-components.md](./03-components.md)
 

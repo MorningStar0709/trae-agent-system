@@ -1,6 +1,6 @@
 # Trae AI Agent System
 
-This project is an **AI Agent Operating System** designed for Trae IDE. Simply place the `.trae/` directory into your project root, and your Agent immediately gains rule constraints, professional skills, and persistent memory capabilities.
+This project is a **Trae AI Agent rules and skills collection**. Run `npx trae-agent-system` to install globally — your Agent immediately gains rule constraints, professional skills, and persistent memory capabilities.
 
 ## What's Included
 
@@ -16,7 +16,11 @@ This project is an **AI Agent Operating System** designed for Trae IDE. Simply p
 
 ## Quick Start
 
-Copy this project's `.trae/` directory to your Trae project root to activate.
+```bash
+npx trae-agent-system
+```
+
+Follow the prompt to select your Trae edition (China or International). Installed globally for all projects.
 
 Try these commands: `"帮我排查这个报错"` / `"先写计划再实现"` / `"提交代码"` / `"记住这个处理方式"` / `"改好了没？验证一下"`
 
