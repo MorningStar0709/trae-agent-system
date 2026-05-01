@@ -95,13 +95,20 @@ cp -r trae-agent-enhancements/skills ~/.trae/skills
 
 ## Documentation
 
-| Doc | Description |
-|:----|:------------|
-| [docs/01-intro.md](docs/01-intro.md) | 15-second overview |
-| [docs/02-overview.md](docs/02-overview.md) | Features & highlights (3 min) |
-| [docs/03-components.md](docs/03-components.md) | Component quick reference (5 min) |
-| [docs/04-design.md](docs/04-design.md) | Design decisions & rationale (5 min) |
-| [docs/05-architecture.md](docs/05-architecture.md) | Complete architecture & workflows (15 min) |
+| Doc | Description | Also available on |
+|:----|:------------|:-----------------|
+| [docs/01-intro.md](docs/01-intro.md) | 15-second overview | [Blog](https://www.iiisle.com/archives/889anRKF) (中文, with comments) |
+| [docs/02-overview.md](docs/02-overview.md) | Features & highlights (3 min) | [Blog](https://www.iiisle.com/archives/Gzp3OH5P) (中文, with comments) |
+| [docs/03-components.md](docs/03-components.md) | Component quick reference (5 min) | [Blog](https://www.iiisle.com/archives/Mx3JgdpO) (中文, with comments) |
+| [docs/04-design.md](docs/04-design.md) | Design decisions & rationale (5 min) | [Blog](https://www.iiisle.com/archives/D43Cn9z2) (中文, with comments) |
+| [docs/05-architecture.md](docs/05-architecture.md) | Complete architecture & workflows (15 min) | [Blog](https://www.iiisle.com/archives/ESHdkuJL) (中文, with comments) |
+
+### Developer References
+
+| Article | Link |
+|:--------|:-----|
+| Language considerations in Skill/Rule/Agent prompts for Chinese LLM users | [Blog](https://www.iiisle.com/archives/pugANGT1) |
+| Trae native memory system: current usage and limitations | [Blog](https://www.iiisle.com/archives/itAAwZ0I) |
 
 ## Skill Paths
 

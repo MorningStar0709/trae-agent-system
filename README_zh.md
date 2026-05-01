@@ -95,13 +95,20 @@ cp -r trae-agent-enhancements/skills ~/.trae/skills
 
 ## 文档导航
 
-| 文档 | 说明 |
+| 文档 | 说明 | 也可在博客阅读 |
+|:-----|:-----|:--------------|
+| [docs/01-intro_zh.md](docs/01-intro_zh.md) | 15 秒极简介绍 | [博客](https://www.iiisle.com/archives/889anRKF)（支持评论互动）|
+| [docs/02-overview_zh.md](docs/02-overview_zh.md) | 功能亮点介绍（3 分钟）| [博客](https://www.iiisle.com/archives/Gzp3OH5P)（支持评论互动）|
+| [docs/03-components_zh.md](docs/03-components_zh.md) | 组件速查手册（5 分钟）| [博客](https://www.iiisle.com/archives/Mx3JgdpO)（支持评论互动）|
+| [docs/04-design_zh.md](docs/04-design_zh.md) | 设计思路与巧思（5 分钟）| [博客](https://www.iiisle.com/archives/D43Cn9z2)（支持评论互动）|
+| [docs/05-architecture_zh.md](docs/05-architecture_zh.md) | 完整架构与工作流（15 分钟）| [博客](https://www.iiisle.com/archives/ESHdkuJL)（支持评论互动）|
+
+### 开发者参考
+
+| 文章 | 链接 |
 |:-----|:-----|
-| [docs/01-intro_zh.md](docs/01-intro_zh.md) | 15 秒极简介绍 |
-| [docs/02-overview_zh.md](docs/02-overview_zh.md) | 功能亮点介绍（3 分钟）|
-| [docs/03-components_zh.md](docs/03-components_zh.md) | 组件速查手册（5 分钟）|
-| [docs/04-design_zh.md](docs/04-design_zh.md) | 设计思路与巧思（5 分钟）|
-| [docs/05-architecture_zh.md](docs/05-architecture_zh.md) | 完整架构与工作流（15 分钟）|
+| LLM 中文使用者在 Skill / Rule / Agent 脚本中的语言权衡 | [博客](https://www.iiisle.com/archives/pugANGT1) |
+| Trae 原生记忆系统：Skill 使用现状与局限性 | [博客](https://www.iiisle.com/archives/itAAwZ0I) |
 
 ## 技能路径
 
