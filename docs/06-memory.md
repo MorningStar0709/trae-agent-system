@@ -6,7 +6,9 @@ This project implements a **dual-track memory system** that combines Trae's nati
 
 The system works as follows:
 
-When the user or agent triggers a query, **Core Memory** (Trae native, session-level cache) is checked first for fast access. If the needed context is not found there, or if cross-session recall is required, the request falls through to **MCP Memory** (knowledge graph, persistent store). Writes go to both tracks: Core Memory handles automatic session-level writes, while MCP Memory is explicitly written to via the `memory-kernel` skill for information that should survive across sessions.
+The routing rule defines **Step 0 (Memory-first inquiry)** as the universal entry gate for all tasks: query **MCP Memory** (authoritative source, knowledge graph) first for project/pattern/user context. Only fall back to full file scanning if memory is insufficient. Core Memory (Trae native, session-level cache) serves as a degraded fallback when MCP is unavailable.
+
+Writes go to both tracks: Core Memory handles automatic session-level writes, while MCP Memory is explicitly written to via the `memory-kernel` skill for information that should survive across sessions.
 
 | Aspect | Core Memory | MCP Memory |
 |:-------|:------------|:-----------|
@@ -23,7 +25,14 @@ When the user or agent triggers a query, **Core Memory** (Trae native, session-l
 
 ### Rule Layer
 
-The `skill-routing-and-execution-path.md` rule controls when to route to the memory system:
+The `skill-routing-and-execution-path.md` rule defines **Step 0 (Memory-first inquiry)** as the universal entry gate for all tasks:
+
+| Order | Action | Role |
+|:------|:-------|:-----|
+| **Step 0** | Auto-query MCP Memory (authoritative source) | Retrieve project/pattern/user context before any file scan or routing decision |
+| Step 1+ | T-Shirt sizing → route to skill | Normal routing flow |
+
+Additionally, these specific scenarios also route to the memory system:
 
 | If the task is... | Route to | Instead of |
 |:------------------|:---------|:-----------|
@@ -77,11 +86,14 @@ Only persist information that is cross-session useful:
 
 ### Read Protocol
 
-Before starting a task in a known project, or when asked about prior context:
+As part of the **Step 0 universal pre-check**, execute at the start of ANY task (not just "known projects"):
 
-1. Query via `mcp_memory_search_nodes` with a broad keyword relevant to the task
-2. Open matching nodes via `mcp_memory_open_nodes`
-3. If no relevant results, proceed normally and consider writing context afterward
+1. Query via `mcp_memory_search_nodes` with broad keywords (project name, domain keywords, entity types)
+2. Open matching nodes via `mcp_memory_open_nodes` for full observations
+3. Assess whether context is sufficient:
+   - **Sufficient**: Skip project-wide file scanning. Only read 1-2 key files to verify version/state changes.
+   - **Insufficient or empty**: Proceed with normal task execution (which triggers T-Shirt sizing and file scanning). Write new findings back afterward.
+4. If MCP tools are unavailable, fall back silently — do not block execution.
 
 ### Update Protocol
 
@@ -124,14 +136,16 @@ The `memory-kernel` skill supports initial seeding. The recommended seed entitie
 
 Open a new session and ask a project-related question. The system should retrieve context from MCP Memory instead of scanning the entire project from scratch.
 
-## Conflict Resolution
+## Conflict Resolution & Degradation
 
-| Conflict Scenario | Resolution |
-|:------------------|:-----------|
+| Scenario | Resolution |
+|:---------|:-----------|
 | Same info in both tracks | Allowed — Core Memory is session cache, MCP Memory is authoritative |
 | Conflicting info | Trust MCP Memory (it is actively maintained) |
 | Outdated info in MCP | Update immediately via delete_observations + add_observations |
-| MCP unavailable | Fall back to Core Memory only; do not block execution |
+| **MCP tools not registered** | Pre-flight check catches this; skip directly to Level 2 (no call wasted) |
+| **MCP unavailable (runtime failure)** | Degrade to Level 1 (Core Memory); if Core Memory also unavailable, Level 2 |
+| **Both unavailable** | Level 2: Choose the lightest fallback path by task type — single-file task reads current file only, overview reads docs/, implementation does full scan, ambiguous asks user, conversational responds directly. Never hardcode "full scan" for all cases. |
 
 ## Integration
 

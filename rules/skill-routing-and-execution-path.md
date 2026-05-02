@@ -1,9 +1,11 @@
 ---
 alwaysApply: true
-description: Always-active task classification and process routing. Apply T-Shirt Sizing before any code change to determine the correct process path (S/M/L). Covers classification rules, Forced Escalation Guardrails, Skill Routing Table, and S/M/L execution flows. See also: forced-escalation-guardrails.md.
+description: Always-active task classification and process routing. Apply T-Shirt Sizing before any code change to determine the correct process path (S/M/L). Step 0: Memory-first inquiry via MCP. Covers classification rules, Forced Escalation Guardrails, Skill Routing Table, and S/M/L execution flows. See also: forced-escalation-guardrails.md.
 ---
 
 # Skill Routing And Execution Path
+
+- **Step 0 — Memory-first inquiry**: Before T-Shirt sizing, file scanning, or routing decisions, query MCP memory via `memory-kernel` for existing project/pattern/user context. If sufficient context exists, skip project-wide scanning — only read specific files to verify version/state changes. If empty or insufficient, proceed normally and write findings back.
 
 - Apply T-Shirt Sizing to bypass heavyweight processes for small tasks:
 
