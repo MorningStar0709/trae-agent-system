@@ -47,23 +47,24 @@ description: Always-active task classification and process routing. Apply T-Shir
 
 - **Flow Overview (by T-Shirt Size)** — consolidates the complete path from entry to branch wrap-up. The `review-and-completion-gates.md` rule controls gate skipping (S skips code review) and fast-path consolidation (S appends wrap-up guidance directly after verification).
 
-**Reclassification during execution**: Classification can be re-evaluated mid-execution if new information changes the cost/risk picture.
-- **Upward (S→M, M→L)**: Mandatory. If implementation reveals more complexity than expected, reclassify and switch to the corresponding path immediately. Do not persist on the wrong path for sunk cost reasons.
-- **Downward (L→M, M→S)**: Optional. If brainstorming or implementation shows the task is simpler than expected, the agent may reclassify down to reduce process overhead. Not mandatory — stability is preferred over optimization.
+  Memory is embedded at three points in every path:
+  - **Entry**: `memory-kernel` read — load cross-session context before starting
+  - **Mid (M/L only)**: `memory-kernel` write — persist interim learnings during long tasks
+  - **Exit**: `memory-kernel` write — persist key outcomes after verification
 
   **S (Direct Path):**
-  `implementation` → `verification-before-completion` → [`finishing-a-development-branch` appended directly]
+  `[memory-kernel: read]` → `implementation` → `verification-before-completion` → `[memory-kernel: write if anything cross-session worthy]` → [`finishing-a-development-branch` appended directly]
   > S path commits after `verification-before-completion` passes (plain `git commit` by default; route to `git-commit` skill if a conventional commit message is preferred).
   > If a debuggable bug is discovered during implementation, switch to `systematic-debugging` (see Skill Routing Table) — the S path is no longer appropriate.
 
   **M (Structured Path):**
-  `writing-plans` → `executing-plans` or `subagent-driven-development` → `verification-before-completion` → `requesting-code-review`
+  `[memory-kernel: read]` → `writing-plans` → `executing-plans` or `subagent-driven-development` → (with periodic `memory-kernel: write` during long-running execution) → `verification-before-completion` → `[memory-kernel: write — key outcomes]` → `requesting-code-review`
   > **Choice rule**: Prefer `executing-plans` when tasks are tightly coupled or the environment lacks reliable implementation subagents. Prefer `subagent-driven-development` when tasks are mostly independent and implementation subagents are available. (`writing-plans` already explains the choice in its execution recommendations.)
-    ├── (no feedback) → [`self-improvement` Knowledge Promotion Gate — see finishing-a-development-branch #knowledge-promotion-gate] → `finishing-a-development-branch`
-    └── (feedback received) → (`receiving-code-review`) → `verification-before-completion` (if fixes applied) → (`git-commit` if fixes applied) → [`self-improvement` Knowledge Promotion Gate — see finishing-a-development-branch #knowledge-promotion-gate] → `finishing-a-development-branch`
+    ├── (no feedback) → [`self-improvement` Knowledge Promotion Gate (also writes to MCP Memory via `memory-kernel`)] → `[memory-kernel: write — promotion results]` → `finishing-a-development-branch`
+    └── (feedback received) → (`receiving-code-review`) → `verification-before-completion` (if fixes applied) → (`git-commit` if fixes applied) → [`self-improvement` Knowledge Promotion Gate (also writes to MCP Memory)] → `[memory-kernel: write — promotion + fix outcomes]` → `finishing-a-development-branch`
 
   **L (Design-First Path):**
-  `brainstorming` → [enter M path from `writing-plans` onward]
+  `[memory-kernel: read]` → `brainstorming` (with `memory-kernel: write` for design decisions) → [enter M path from `writing-plans` onward]
 
 - **Alternative entry points**: The flow above is the default development path. The Skill Routing Table handles specialized scenarios (debugging, TDD, code review, git ops, self-improvement) that bypass or re-enter this main path at different points.
 

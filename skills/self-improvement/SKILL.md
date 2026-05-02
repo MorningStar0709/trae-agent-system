@@ -5,7 +5,7 @@ description: Captures learnings, errors, and corrections to enable continuous im
 
 # Self-Improvement
 
-Capture development insights, command failures, and user feedback into Trae's Core Memory or project-level rules. This ensures the agent learns from mistakes and avoids repeating errors.
+Capture development insights, command failures, and user feedback into Trae's Core Memory, MCP Memory (for cross-session persistence), or project-level rules. This ensures the agent learns from mistakes and avoids repeating errors.
 
 ## Use This Skill
 
@@ -40,7 +40,7 @@ When you finish logging a learning, report back using this format:
 
 ```markdown
 **教训已记录 (Learning Captured)**
-**分类:** `[Core Memory / Project Rule / New Skill]`
+**分类:** `[Core Memory / MCP Memory / Project Rule / New Skill]`
 **摘要:** [一句话概括]
 **应用场景:** [什么情况下会用]
 ```
@@ -62,3 +62,4 @@ After reporting, resume the original workflow that triggered the learning. Do no
 - `verification-before-completion`: Client — non-obvious validation failures are logged as `Experience`.
 - `finishing-a-development-branch`: Client — during branch wrap-up, persistent workarounds and rule discoveries are promoted via self-improvement.
 - `subagent-driven-development`: Client — repeated subagent failures are logged to prevent future mis-routing.
+- `memory-kernel`: Downstream — after capturing a learning, if classified as `MCP Memory`, invoke `memory-kernel` to write it to the knowledge graph for cross-session persistence.
