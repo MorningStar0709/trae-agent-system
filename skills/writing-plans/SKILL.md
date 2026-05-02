@@ -69,7 +69,7 @@ If any step is blocked, explicitly state the block reason in the final reply. Do
 
 ## File Structure
 
-Before defining tasks, list the files to be created or modified and the responsibility of each. This is where you lock in breakdown decisions and reduce execution ambiguity.
+Before defining tasks, list the files to be created or modified and the responsibility of each.
 
 - Units with clear design boundaries and well-defined interfaces. Each file should have one clear responsibility.
 - You reason best about code that fits in context at once; the more focused the file, the more reliable your edits. Prefer small, focused files over large, monolithic ones.

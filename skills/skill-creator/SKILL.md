@@ -7,8 +7,6 @@ description: Create, modify, refactor, review, or iterate Trae Skills. Use only 
 
 Use this Skill to create or improve Trae Skills. A Trae Skill is a reusable capability module: a clear, rigorous, executable instruction document that tells the model when to use it, how to act, and what output to produce.
 
-The default goal is a Skill that is easy for Trae to discover, hard to misuse, and simple to maintain.
-
 When the user writes in Chinese, discuss decisions and final summaries in Simplified Chinese. Keep Skill names, directory names, frontmatter keys, commands, and file paths in English or original form.
 
 ## Use This Skill

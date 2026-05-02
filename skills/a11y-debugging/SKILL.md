@@ -7,7 +7,7 @@ description: Uses Chrome DevTools MCP for accessibility debugging and auditing i
 
 **Accessibility Tree vs DOM**: Visually hiding an element (e.g., `CSS opacity: 0`) behaves differently for screen readers than `display: none` or `aria-hidden="true"`. The `take_snapshot` tool returns the accessibility tree of the page, which represents what assistive technologies "see", making it the most reliable source of truth for semantic structure.
 
-**Reading web.dev documentation**: If you need to research specific accessibility guidelines (like `https://web.dev/articles/accessible-tap-targets`), you can append `.md.txt` to the URL (e.g., `https://web.dev/articles/accessible-tap-targets.md.txt`) to fetch the clean, raw markdown version. This is much easier to read!
+**Reading web.dev documentation**: If you need to research specific accessibility guidelines (like `https://web.dev/articles/accessible-tap-targets`), you can append `.md.txt` to the URL (e.g., `https://web.dev/articles/accessible-tap-targets.md.txt`) to fetch the clean, raw markdown version.
 
 ## Trae and Windows Notes
 
@@ -44,7 +44,7 @@ Start by running a Lighthouse accessibility audit to get a comprehensive baselin
       # Extract failing audits with their details
       node -e "const r=require('./report.json'); Object.values(r.audits).filter(a=>a.score!==null && a.score<1).forEach(a=>console.log(JSON.stringify({id:a.id, title:a.title, items:a.details?.items})))"
       ```
-    - This efficiently extracts the `selector` and `snippet` of failing elements without loading the full report into context.
+    - This extracts the `selector` and `snippet` of failing elements.
 
 ### 2. Browser Issues & Audits
 
@@ -52,8 +52,6 @@ Chrome automatically checks for common accessibility problems. Use `list_console
 
 - `types`: `["issue"]`
 - `includePreservedMessages`: `true` (to catch issues that occurred during page load)
-
-This often reveals missing labels, invalid ARIA attributes, and other critical errors without manual investigation.
 
 ### 3. Semantics & Structure
 

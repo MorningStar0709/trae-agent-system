@@ -354,7 +354,7 @@ Treat scan hits as review leads, not automatic findings. For example, `rm -rf` i
 
 ## Rating Scale
 
-Use the rating system below for every reviewed Skill. The purpose is to make the review repeatable: first score each dimension, then apply downgrade rules, then assign the final rating.
+Use the rating system below for every reviewed Skill: first score each dimension, then apply downgrade rules, then assign the final rating.
 
 ### Rating Dimensions
 

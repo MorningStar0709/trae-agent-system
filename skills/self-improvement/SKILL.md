@@ -5,7 +5,7 @@ description: Captures learnings, errors, and corrections to enable continuous im
 
 # Self-Improvement
 
-Capture development insights, command failures, and user feedback into Trae's Core Memory, MCP Memory (for cross-session persistence), or project-level rules. This ensures the agent learns from mistakes and avoids repeating errors.
+Capture development insights, command failures, and user feedback into Trae's Core Memory, MCP Memory (for cross-session persistence), or project-level rules.
 
 Classification rule of thumb: Core Memory for session-level corrections; MCP Memory for cross-session reusable knowledge; Project Rule for recurring patterns worth codifying; New Skill for a capability that deserves its own toolbox.
 

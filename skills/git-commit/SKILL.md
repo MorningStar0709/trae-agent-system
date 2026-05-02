@@ -11,7 +11,7 @@ Create standardized, semantic git commits using the Conventional Commits specifi
 
 When the user writes in Chinese, default to a **hybrid Conventional Commit format**: keep the `type` in English (for tooling compatibility), but write the `scope`, `description`, and `body` in Simplified Chinese. Only use a pure English commit message if the user explicitly asks for it or the repository strictly enforces English.
 
-This skill is for agent execution in Trae. On Windows, use PowerShell-compatible commands and avoid Unix-only shell constructs.
+On Windows, use PowerShell-compatible commands and avoid Unix-only shell constructs.
 
 ## Do Not Use
 

@@ -131,7 +131,6 @@ The HTML document itself takes too long to arrive.
 - **Verification**: Re-run the trace (`performance_start_trace` with `reload: true`) and compare the new subpart breakdown. The bottleneck should shrink.
 - **Emulation**: Lab measurements differ from real-world experience. Use `emulate` to test under constraints:
   - `emulate` with `networkConditions: "Fast 3G"` and `cpuThrottlingRate: 4`.
-  - This surfaces issues visible only on slower connections/devices.
 
 ## Failure Handling
 

@@ -178,7 +178,7 @@ Do not use `content:` as a default code or document search strategy. For code co
 
 ## Windows and Trae Notes
 
-- This MCP is most useful on Windows when Everything is installed and the Everything service is running.
+- Requires Everything installed and Everything service running.
 - If the MCP fails on Windows, check whether `EVERYTHING_SDK_PATH` points to the specific SDK DLL file, not just the SDK folder.
 - For a typical Windows setup, the expected SDK DLL path is `C:\Program Files\Everything\SDK\dll\Everything64.dll`.
 - Return Windows absolute paths exactly as reported.

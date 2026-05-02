@@ -60,7 +60,7 @@ During wrap-up of medium or larger tasks, check if any persistent workarounds, r
 - A project convention was clarified through user correction.
 - A recurring error pattern was encountered.
 
-If such knowledge exists, invoke `self-improvement` to capture it before proceeding with wrap-up. This ensures learnings are not lost when the branch is merged and discarded.
+If such knowledge exists, invoke `self-improvement` to capture it before proceeding with wrap-up.
 
 Also, if memories are near the 20-entry limit or containing outdated entries, run a quick memory maintenance pass using `self-improvement`'s `resources/memory-maintenance.md` before adding new entries.
 

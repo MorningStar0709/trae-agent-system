@@ -45,7 +45,7 @@ description: "Use when the user asks to brainstorm, clarify requirements, compar
 
 ## Anti-Pattern: "This is too simple, no design needed"
 
-不要因为任务看起来熟悉就跳过澄清。真正需要这个 Skill 的任务，返工通常来自误解目标、遗漏约束或过早实现。对于小任务，设计可以很短；对于已经清晰的任务，则不应强行套用本 Skill。
+不要因为任务看起来熟悉就跳过澄清。对于小任务，设计可以很短；对于已经清晰的任务，则不应强行套用本 Skill。
 
 ## Checklist
 
@@ -102,8 +102,6 @@ digraph brainstorming {
     "用户审查设计结果?" -> "结束于设计结论" [label="仅需设计"];
 }
 ```
-
-默认目标是让需求、约束和方案足够清晰，而不是强制把所有任务都送进同一条后续流程。常见下一步是进入计划模式或输出分步骤实现方案，但不是唯一下一步。
 
 ## Detailed Workflow
 
