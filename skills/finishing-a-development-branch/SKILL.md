@@ -189,3 +189,5 @@ If wrap-up is not truly completed due to validation failure, remote failure, or 
 - `verification-before-completion`: Upstream — validate before stating "ready to merge / ready to commit".
 - `git-commit`: Upstream — if the branch has uncommitted work that needs final commits before wrap-up.
 - `chinese-git-workflow`: Adjacent — use when the remote is Gitee, GitLab, Coding, CNB, or requires platform-specific PR/MR configuration.
+- `self-improvement`: Internal — Knowledge Promotion Gate (section 1.5) invokes self-improvement during wrap-up.
+- `memory-kernel`: Downstream — after self-improvement completes, write promoted knowledge to MCP Memory.
