@@ -59,7 +59,7 @@ description: Always-active task classification and process routing. Apply T-Shir
 
   **S (Direct Path):**
   `implementation` (direct coding, no specialized skill) → `verification-before-completion` → `[memory-kernel: write if anything cross-session worthy]` → [`finishing-a-development-branch` appended directly]
-  > S path commits after `verification-before-completion` passes (plain `git commit` by default; route to `git-commit` skill if a conventional commit message is preferred).
+  > S path commits after `verification-before-completion` passes (plain `git commit`; S tasks skip the `git-commit` skill per `review-and-completion-gates.md`).
   > If a debuggable bug is discovered during implementation, switch to `systematic-debugging` (see Skill Routing Table) — the S path is no longer appropriate.
 
   **M (Structured Path):**
