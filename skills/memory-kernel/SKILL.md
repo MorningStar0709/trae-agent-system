@@ -75,6 +75,19 @@ When information in MCP Memory is found to be outdated:
 2. Use `mcp_memory_add_observations` to add corrected facts
 3. Do NOT delete and recreate the entity unless the entire entity is invalid
 
+### Calibration Mode (Manual Trigger)
+
+When the user says "校准记忆" or "同步记忆", perform a targeted refresh:
+
+1. Read key project files: `package.json`, `rules/` directory listing, `skills/` directory listing, `docs/` directory listing
+2. Read the current `trae_agent_enhancements` entity via `mcp_memory_open_nodes`
+3. Compare observations against actual file state:
+   - Missing skills or rules → append via `mcp_memory_add_observations`
+   - Outdated version numbers or descriptions → `mcp_memory_delete_observations` + `mcp_memory_add_observations`
+   - Renamed or removed items → `mcp_memory_delete_observations`
+4. Report the diff to the user before writing: "发现 X 处差异，是否更新？（列出差异明细）"
+5. Only write changes after user confirmation
+
 ## Output Contract
 
 When using MCP Memory, include in your response:

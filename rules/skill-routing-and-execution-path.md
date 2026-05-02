@@ -44,6 +44,7 @@ description: Always-active task classification and process routing. Apply T-Shir
   | Code review feedback to apply | `receiving-code-review` | blindly accepting comments |
   | New session, need project context before starting | `memory-kernel` | scanning the entire project from scratch |
   | "你还记得吗", cross-session memory recall | `memory-kernel` | guessing from current context |
+  | "校准记忆" / "同步记忆" | `memory-kernel` (Calibration Mode) | letting memory go stale |
 
 - **Flow Overview (by T-Shirt Size)** — consolidates the complete path from entry to branch wrap-up. The `review-and-completion-gates.md` rule controls gate skipping (S skips code review) and fast-path consolidation (S appends wrap-up guidance directly after verification).
 
