@@ -121,6 +121,7 @@ cp -r trae-agent-enhancements/skills ~/.trae/skills
 | [docs/03-components_zh.md](docs/03-components_zh.md) | 组件速查手册（5 分钟）| [博客](https://www.iiisle.com/archives/Mx3JgdpO)（支持评论互动）|
 | [docs/04-design_zh.md](docs/04-design_zh.md) | 设计思路与巧思（5 分钟）| [博客](https://www.iiisle.com/archives/D43Cn9z2)（支持评论互动）|
 | [docs/05-architecture_zh.md](docs/05-architecture_zh.md) | 完整架构与工作流（15 分钟）| [博客](https://www.iiisle.com/archives/ESHdkuJL)（支持评论互动）|
+| [docs/06-memory_zh.md](docs/06-memory_zh.md) | 记忆系统 — 双轨持久化记忆 | — |
 
 ### 开发者参考
 

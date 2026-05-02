@@ -121,6 +121,7 @@ cp -r trae-agent-enhancements/skills ~/.trae/skills
 | [docs/03-components.md](docs/03-components.md) | Component quick reference (5 min) | [Blog](https://www.iiisle.com/archives/Mx3JgdpO) (中文, with comments) |
 | [docs/04-design.md](docs/04-design.md) | Design decisions & rationale (5 min) | [Blog](https://www.iiisle.com/archives/D43Cn9z2) (中文, with comments) |
 | [docs/05-architecture.md](docs/05-architecture.md) | Complete architecture & workflows (15 min) | [Blog](https://www.iiisle.com/archives/ESHdkuJL) (中文, with comments) |
+| [docs/06-memory.md](docs/06-memory.md) | Memory & learning — dual-track persistent memory | — |
 
 ### Developer References
 
