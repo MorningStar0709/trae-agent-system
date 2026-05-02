@@ -54,13 +54,15 @@ Do NOT write for:
 3. If entity does not exist: use `mcp_memory_create_entities` with name, type, and initial observations
 4. For relationships between entities, use `mcp_memory_create_relations`
 
-Entity naming convention: use `snake_case`, prefix project name for project-specific entities.
+Entity naming convention: use `snake_case`.
+- **Project entities**: no prefix — named as the project name (e.g., `trae_agent_enhancements`)
+- **Public entities**: prefix `public_` — reusable across projects (e.g., `public_chenxing`, `public_architecture_patterns`)
 
 Entity type convention:
-- `project` for project-level entities (tech stack, architecture, conventions)
-- `pattern` for reusable solutions and decisions
-- `preference` for user preferences
-- `profile` for user identity
+- `project` for project-level entities (tech stack, architecture, conventions) — project memory
+- `pattern` for reusable solutions and decisions — public memory
+- `preference` for user preferences — public memory
+- `profile` for user identity — public memory
 
 ### Read Protocol
 
