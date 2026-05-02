@@ -5,8 +5,6 @@ description: Use when you need a safe git worktree before starting isolated feat
 
 # Using Git Worktrees
 
-## Overview
-
 ## Use This Skill
 
 - Need to start a new task without polluting the current workspace.

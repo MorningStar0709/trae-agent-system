@@ -5,8 +5,6 @@ description: Use when there are 2 or more independent tasks that can be delegate
 
 # Dispatching Parallel Agents
 
-## Overview
-
 ## Use This Skill
 
 - There are 2 or more mutually independent search, review, or browser validation tasks.

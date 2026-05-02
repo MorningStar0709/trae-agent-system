@@ -5,8 +5,6 @@ description: Configure Git for domestic platforms and manage branching strategie
 
 # Chinese Git Workflow
 
-## Overview
-
 ## Use This Skill
 
 - When configuring remotes for Gitee, Coding.net, Jihu GitLab, or CNB.
