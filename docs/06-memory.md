@@ -81,6 +81,8 @@ Every MCP Memory write must pass these quality gates. Full protocol in `memory-k
 
 **Entity granularity**: One project entity per project; add observations, never duplicate the entity. One pattern entity per distinct solution.
 
+**Cross-project safety**: MCP Memory is shared across all projects. Only modify entities matching the current project name. `public_`-prefixed entities are append-only — never delete or rename them. When project identity is unclear, ask the user before writing.
+
 ### Write Protocol
 
 Only persist information that is cross-session useful:

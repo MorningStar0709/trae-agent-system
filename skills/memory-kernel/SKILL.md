@@ -85,6 +85,13 @@ Every observation written to MCP Memory must pass these gates.
 - Entity relationship stale: `delete_relations` then `create_relations`.
 - Entire entity invalid: only then `delete_entities`.
 
+**Safety boundary — cross-project isolation:**
+MCP Memory is a shared store. All projects share one knowledge graph.
+- Only modify entities whose name matches the current project context (derived from `git remote` or directory name).
+- `public_`-prefixed entities are shared across projects. Append observations to them but do NOT delete or rename them without explicit user confirmation.
+- `delete_entities` and `delete_observations` are prohibited on entities that do not match the current project name or the `public_` prefix — if you encountered one via search, skip it and proceed.
+- When in doubt (no git remote, ambiguous project identity), ask the user before writing, updating, or deleting any entity.
+
 ### Write Protocol
 
 1. Check if the entity already exists via `mcp_memory_search_nodes`
