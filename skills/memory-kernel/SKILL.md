@@ -63,14 +63,48 @@ Query MCP Memory before ANY task as the universal first step:
 
 ## Execution Protocol
 
+### Writing Standard
+
+Every observation written to MCP Memory must pass these gates.
+
+**Observation format:** `[YYYY-MM-DD] <content>`
+- Timestamp is the date the observation was written or last verified.
+- Content is a single, self-contained fact. One sentence per observation.
+
+**Write-worthy (pass the gate):**
+- Project architecture, tech stack, key design decisions
+- Conventions (naming, patterns, workflows) that affect multiple files
+- User preferences that persist across sessions
+- Reusable solutions, recurring error patterns, root causes
+- Entity relationships that structure the knowledge graph
+
+**Not write-worthy (skip):**
+- Current file tree structure (always re-scanable)
+- Information the user just provided in the current message
+- Session-only state (variable names, temp file paths)
+- Trivial or self-evident facts ("this project uses Git")
+- Secrets, tokens, passwords, API keys — NEVER
+
+**Entity granularity:**
+- One project entity per project. Add observations to it, do not create multiple project entities.
+- One pattern entity per distinct solution. Merge related patterns — do not split a single concept across entities.
+- One preference entity per user profile.
+- Prefer growing existing entities over creating new ones.
+
+**Update discipline:**
+- Stale observation: `delete_observations` the old one, `add_observations` the corrected one (both with current timestamp).
+- Entity relationship stale: `delete_relations` then `create_relations`.
+- Entire entity invalid: only then `delete_entities`.
+
 ### Write Protocol
 
 1. Check if the entity already exists via `mcp_memory_search_nodes`
 2. If entity exists: use `mcp_memory_add_observations` to append new facts
 3. If entity does not exist: use `mcp_memory_create_entities` with name, type, and initial observations
 4. For relationships between entities, use `mcp_memory_create_relations`
+5. Every observation must include a `[YYYY-MM-DD]` prefix. Same date for bulk updates.
 
-Entity naming convention: use `snake_case`.
+Entity naming convention: use `snake_case`. Timestamps are in observations, not in entity names.
 - **Project entities**: no prefix — named as the project name (e.g., `trae_agent_enhancements`)
 - **Public entities**: prefix `public_` — reusable across projects (e.g., `public_chenxing`, `public_architecture_patterns`)
 
@@ -111,8 +145,8 @@ Entity type convention:
 ### Update Protocol
 
 When information in MCP Memory is found to be outdated:
-1. Use `mcp_memory_delete_observations` to remove stale facts
-2. Use `mcp_memory_add_observations` to add corrected facts
+1. Use `mcp_memory_delete_observations` to remove stale facts (identified by their timestamp prefix `[YYYY-MM-DD]`)
+2. Use `mcp_memory_add_observations` to add corrected facts with the current date `[YYYY-MM-DD]`
 3. Do NOT delete and recreate the entity unless the entire entity is invalid
 
 ### Calibration Mode (Manual Trigger)
@@ -126,7 +160,7 @@ When the user says "校准记忆" or "同步记忆", perform a targeted refresh:
    - Ask user: "项目记忆为空，是否基于当前文件状态初始化？"
    - If confirmed: use `mcp_memory_create_entities` to create the project entity with initial observations from step 1
    - Then proceed to step 4 to confirm the diff
-4. Compare observations against actual file state (or against the just-created entity):
+4. Compare observations (check timestamp prefix `[YYYY-MM-DD]` for staleness) against actual file state (or against the just-created entity):
    - Missing skills or rules → append via `mcp_memory_add_observations`
    - Outdated version numbers or descriptions → `mcp_memory_delete_observations` + `mcp_memory_add_observations`
    - Renamed or removed items → `mcp_memory_delete_observations`

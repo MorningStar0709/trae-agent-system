@@ -64,6 +64,23 @@ The following tools are provided by the MCP Memory Server:
 
 ## Usage
 
+### Writing Standard
+
+Every MCP Memory write must pass these quality gates. Full protocol in `memory-kernel` skill's Writing Standard section.
+
+**Format**: Each observation starts with `[YYYY-MM-DD]` followed by a single sentence. Example: `[2025-05-01] Project tech stack: Node.js + React`.
+
+**Write-worthy**:
+- ✅ Project architecture, tech stack, key design decisions
+- ✅ Conventions (naming, patterns, workflows) affecting multiple files
+- ✅ Cross-session user preferences
+- ✅ Reusable solutions, recurring error patterns, root causes
+- ❌ File tree structure (always re-scanable)
+- ❌ Information just provided in the current message
+- ❌ Secrets, tokens, passwords, API keys
+
+**Entity granularity**: One project entity per project; add observations, never duplicate the entity. One pattern entity per distinct solution.
+
 ### Write Protocol
 
 Only persist information that is cross-session useful:
@@ -97,11 +114,11 @@ As part of the **Step 0 universal pre-check**, execute at the start of ANY task 
 
 ### Update Protocol
 
-When information in memory is found to be outdated:
+When memory information is outdated:
 
-1. Remove stale observations via `mcp_memory_delete_observations`
-2. Add corrected observations via `mcp_memory_add_observations`
-3. Do NOT delete and recreate entities unless the entire node is invalid
+1. Remove stale observations via `mcp_memory_delete_observations` (identify by timestamp prefix `[YYYY-MM-DD]`)
+2. Add corrected observations via `mcp_memory_add_observations` with current date `[YYYY-MM-DD]`
+3. Do NOT delete and recreate the entity unless the entire entity is invalid
 
 ## Initial Setup
 
