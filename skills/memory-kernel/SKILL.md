@@ -14,7 +14,7 @@ This skill governs the dual memory system:
 | **Trae Core Memory** | Trae native | Current session | Ephemeral |
 | **MCP Memory** | Knowledge Graph (JSONL) | Cross-session | Persistent |
 
-MCP Memory is the authoritative cross-session store. Check MCP Memory before scanning the project from scratch.
+Check MCP Memory before scanning the project from scratch.
 
 ## Use This Skill
 
@@ -49,17 +49,6 @@ MCP Memory is the authoritative cross-session store. Check MCP Memory before sca
 - **查询太泛**：先缩小搜索范围再重试
 - **未指定项目上下文**：从当前 git remote 或目录名推断
 - **MCP 工具不可用**：按三级降级链处理，不阻塞
-
-## When To Read
-
-Query MCP Memory before ANY task as the universal first step:
-
-- **Step 0**: Before T-Shirt sizing, file scanning, or any routing decision, check MCP Memory for existing project/pattern/user context. If sufficient context exists, skip project-wide scanning — only read specific files to verify version/state changes.
-- Project architecture or conventions
-- User preferences (tech stack, naming conventions, tools)
-- Prior decisions or solutions
-- User identity and context
-- Cross-session context: starting a new session in a known project
 
 ## Execution Protocol
 

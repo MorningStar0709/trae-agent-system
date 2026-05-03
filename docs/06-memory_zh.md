@@ -116,8 +116,8 @@ MCP 记忆的每次写入必须遵守以下标准。详细协议见 `memory-kern
 
 当记忆中的信息已过时：
 
-1. 通过 `mcp_memory_delete_observations` 移除过时观察
-2. 通过 `mcp_memory_add_observations` 添加修正后的观察
+1. 通过 `mcp_memory_delete_observations` 移除过时观察（按时间戳前缀 `[YYYY-MM-DD]` 识别）
+2. 通过 `mcp_memory_add_observations` 添加修正后的观察，使用当前日期 `[YYYY-MM-DD]`
 3. 除非整个节点无效，否则不要删除并重建实体
 
 ## 初始化
